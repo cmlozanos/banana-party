@@ -16,7 +16,22 @@ export class LevelSelectMenu extends Phaser.Scene {
         const bgColor = LEVELS.LEVEL_COLORS[0].sky;
         this.cameras.main.setBackgroundColor(bgColor);
         
-        // Título del juego
+        // Configurar cámara para permitir scroll
+        const levelCount = LEVELS.PRESETS.length;
+        const buttonHeight = 80;
+        const buttonSpacingY = 120;
+        const cols = 5; // Más columnas en el grid
+        const rows = Math.ceil(levelCount / cols);
+        
+        // Calcular altura total del contenido
+        const totalContentHeight = height * 0.4 + (rows - 1) * buttonSpacingY + buttonHeight + height * 0.1;
+        const worldHeight = Math.max(height, totalContentHeight);
+        
+        // Configurar límites del mundo y cámara para scroll
+        this.cameras.main.setBounds(0, 0, width, worldHeight);
+        this.cameras.main.setScroll(0, 0);
+        
+        // Título del juego (con scroll)
         const title = this.add.text(width / 2, height * 0.15, '🍌 Banana Party 🍌', {
             fontSize: '64px',
             fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
@@ -27,29 +42,12 @@ export class LevelSelectMenu extends Phaser.Scene {
         });
         title.setOrigin(0.5);
         
-        // Subtítulo
-        const subtitle = this.add.text(width / 2, height * 0.25, 'Selecciona un nivel', {
-            fontSize: '32px',
-            fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
-            fill: '#FFFFFF',
-            stroke: '#000000',
-            strokeThickness: 4,
-            align: 'center'
-        });
-        subtitle.setOrigin(0.5);
-        
         // Crear botones para cada nivel en formato grid
-        const levelCount = LEVELS.PRESETS.length;
-        const buttonWidth = 250;
-        const buttonHeight = 80;
-        const buttonSpacingX = 280; // Espaciado horizontal entre botones
-        const buttonSpacingY = 120; // Espaciado vertical entre botones
-        const cols = 3; // Número de columnas en el grid
-        const rows = Math.ceil(levelCount / cols); // Número de filas necesarias
+        const buttonWidth = 200; // Botones más pequeños para más columnas
+        const buttonSpacingX = 220; // Espaciado horizontal entre botones
         
         // Calcular posición inicial para centrar el grid
         const gridWidth = (cols - 1) * buttonSpacingX + buttonWidth;
-        const gridHeight = (rows - 1) * buttonSpacingY + buttonHeight;
         const startX = (width - gridWidth) / 2 + buttonWidth / 2;
         const startY = height * 0.4;
         
@@ -86,7 +84,7 @@ export class LevelSelectMenu extends Phaser.Scene {
             
             // Texto del botón
             const buttonText = this.add.text(x, y, `Nivel ${levelNumber}`, {
-                fontSize: '36px',
+                fontSize: '28px',
                 fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
                 fill: '#FFFFFF',
                 stroke: '#000000',
@@ -159,15 +157,12 @@ export class LevelSelectMenu extends Phaser.Scene {
             });
         }
         
-        // Instrucciones
-        const instructions = this.add.text(width / 2, height * 0.9, 'Haz clic en un nivel para comenzar', {
-            fontSize: '24px',
-            fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
-            fill: '#FFFFFF',
-            stroke: '#000000',
-            strokeThickness: 2,
-            align: 'center'
+        // Habilitar scroll con la rueda del ratón
+        this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
+            const currentScrollY = this.cameras.main.scrollY;
+            const maxScrollY = worldHeight - height;
+            const newScrollY = Phaser.Math.Clamp(currentScrollY - deltaY * 0.5, 0, maxScrollY);
+            this.cameras.main.setScroll(0, newScrollY);
         });
-        instructions.setOrigin(0.5);
     }
 }
