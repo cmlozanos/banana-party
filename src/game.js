@@ -74,16 +74,21 @@ class BananaPartyGame extends Phaser.Scene {
         const worldHeight = this.cameras.main.height * WORLD.HEIGHT_MULTIPLIER;
         const groundY = worldHeight - WORLD.GROUND_Y_OFFSET;
         
+        // Obtener el preset del nivel actual para usar su goalHeight
+        const levelIndex = (this.currentLevel - 1) % LEVELS.PRESETS.length;
+        const levelPreset = LEVELS.PRESETS[levelIndex];
+        const goalHeight = levelPreset.goalHeight || 3000; // Fallback a 3000 si no existe
+        
         // Calcular posición de la meta (altura objetivo desde el suelo)
-        const goalY = groundY - LEVELS.LEVEL_HEIGHT;
+        const goalY = groundY - goalHeight;
         this.levelHeight = goalY;
         
         // Crear sprite de meta como polígono simple (bandera o arco) - MÁS GRANDE Y VISIBLE
         if (!this.textures.exists('goal')) {
             const goalGraphics = this.add.graphics();
             const goalSize = LEVELS.GOAL_SIZE;
-            goalGraphics.fillStyle(0xFFD700, 1); // Dorado
-            goalGraphics.lineStyle(8, 0xFFA500, 1); // Naranja para borde más grueso
+            goalGraphics.fillStyle(LEVELS.GOAL_COLOR, 1);
+            goalGraphics.lineStyle(LEVELS.GOAL_BORDER_WIDTH, LEVELS.GOAL_BORDER_COLOR, 1);
             
             // Crear polígono de arco/bandera simple pero más grande
             goalGraphics.beginPath();
@@ -97,8 +102,8 @@ class BananaPartyGame extends Phaser.Scene {
             goalGraphics.strokePath();
             
             // Añadir un círculo brillante en el centro para hacerlo más visible
-            goalGraphics.fillStyle(0xFFFFFF, 0.8);
-            goalGraphics.fillCircle(goalSize * 0.5, goalSize * 0.3, goalSize * 0.15);
+            goalGraphics.fillStyle(LEVELS.GOAL_CENTER_CIRCLE_COLOR, LEVELS.GOAL_CENTER_CIRCLE_ALPHA);
+            goalGraphics.fillCircle(goalSize * 0.5, goalSize * 0.3, goalSize * LEVELS.GOAL_CENTER_CIRCLE_RADIUS_FACTOR);
             
             goalGraphics.generateTexture('goal', goalSize, goalSize);
             goalGraphics.destroy();
@@ -115,17 +120,17 @@ class BananaPartyGame extends Phaser.Scene {
             (LEVELS.GOAL_SIZE - LEVELS.GOAL_COLLISION_SIZE) / 2
         );
         
-        this.goal.setDepth(15);
+        this.goal.setDepth(LEVELS.GOAL_DEPTH);
         this.goal.setOrigin(0.5, 0.5);
         this.goal.setScale(1.0);
         
         // Hacer la meta más visible con un efecto de brillo
-        this.goal.setTint(0xFFFFFF);
+        this.goal.setTint(LEVELS.GOAL_TINT);
         
         // Configurar colisión con el jugador
         this.physics.add.overlap(this.player.sprite, this.goal, this.reachGoal, null, this);
         
-        console.log(`🎯 Meta creada en Y: ${goalY}, Altura del nivel: ${LEVELS.LEVEL_HEIGHT}`);
+        console.log(`🎯 Meta creada en Y: ${goalY}, Altura del nivel: ${goalHeight}`);
     }
     
     reachGoal(player, goal) {
@@ -473,8 +478,8 @@ class BananaPartyGame extends Phaser.Scene {
         });
         this.platforms = [];
         
-        // Crear plataformas según el preset del nivel
-        levelPreset.forEach((platformData, index) => {
+        // Crear plataformas según el preset del nivel (ahora levelPreset.platforms)
+        levelPreset.platforms.forEach((platformData, index) => {
             // x es un factor (0.0 a 1.0) que representa la posición horizontal relativa
             const x = platformData.x * width;
             // y es la distancia desde el suelo hacia arriba
@@ -524,24 +529,75 @@ class BananaPartyGame extends Phaser.Scene {
             const bananaWidth = 40;
             const bananaHeight = 60;
             
-            // Dibujar banana simple como un polígono curvo dentro de los límites
-            bananaGraphics.fillStyle(BANANA.TEMP_COLOR, 1);
-            bananaGraphics.lineStyle(2, 0xFFA500, 1);
+            // Dibujar banana estilo emoji 🍌 - forma curva simple y reconocible
+            // Cuerpo principal de la banana (forma curva como el emoji)
+            bananaGraphics.fillStyle(BANANA.TEMP_COLOR, 1); // Amarillo #FFD700
+            bananaGraphics.lineStyle(2, 0xFFA500, 1); // Borde naranja
             
-            // Polígono simple de banana (asegurándose de que todos los puntos estén dentro de 0-40 x 0-60)
+            // Forma curva de banana estilo emoji - más simple y reconocible
             bananaGraphics.beginPath();
-            bananaGraphics.moveTo(15, 5);      // Parte superior izquierda
-            bananaGraphics.lineTo(30, 8);      // Curva superior
-            bananaGraphics.lineTo(35, 20);     // Lado derecho superior
-            bananaGraphics.lineTo(32, 40);     // Lado derecho medio
-            bananaGraphics.lineTo(25, 55);     // Parte inferior derecha
-            bananaGraphics.lineTo(10, 58);     // Parte inferior izquierda
-            bananaGraphics.lineTo(5, 40);       // Lado izquierdo inferior
-            bananaGraphics.lineTo(8, 20);      // Lado izquierdo medio
-            bananaGraphics.lineTo(12, 8);      // Lado izquierdo superior
+            // Parte superior (estrecha, donde está el tallo)
+            bananaGraphics.moveTo(16, 2);      // Superior izquierda
+            bananaGraphics.lineTo(24, 2);      // Superior derecha
+            // Lado derecho (curva hacia afuera)
+            bananaGraphics.lineTo(30, 5);      // 
+            bananaGraphics.lineTo(34, 10);     // 
+            bananaGraphics.lineTo(36, 18);     // 
+            bananaGraphics.lineTo(37, 26);     // 
+            bananaGraphics.lineTo(36, 34);     // Punto más ancho
+            bananaGraphics.lineTo(34, 42);     // 
+            bananaGraphics.lineTo(30, 50);     // 
+            bananaGraphics.lineTo(26, 56);     // 
+            bananaGraphics.lineTo(22, 59);     // 
+            // Parte inferior (punta redondeada)
+            bananaGraphics.lineTo(18, 60);     // Punta inferior
+            bananaGraphics.lineTo(14, 59);     // 
+            bananaGraphics.lineTo(10, 56);     // 
+            bananaGraphics.lineTo(6, 50);      // 
+            bananaGraphics.lineTo(4, 42);      // 
+            bananaGraphics.lineTo(3, 34);      // Punto más ancho izquierdo
+            bananaGraphics.lineTo(4, 26);      // 
+            bananaGraphics.lineTo(6, 18);      // 
+            bananaGraphics.lineTo(10, 10);     // 
+            bananaGraphics.lineTo(14, 5);      // 
+            bananaGraphics.lineTo(16, 2);      // Cerrar
             bananaGraphics.closePath();
             bananaGraphics.fillPath();
             bananaGraphics.strokePath();
+            
+            // Líneas características del emoji de banana (3 líneas curvas)
+            bananaGraphics.lineStyle(2, 0xFFE55C, 0.8); // Amarillo más claro
+            // Línea 1 (superior)
+            bananaGraphics.beginPath();
+            bananaGraphics.moveTo(12, 8);
+            bananaGraphics.lineTo(16, 12);
+            bananaGraphics.lineTo(20, 18);
+            bananaGraphics.lineTo(22, 24);
+            bananaGraphics.lineTo(22, 30);
+            bananaGraphics.strokePath();
+            // Línea 2 (media)
+            bananaGraphics.beginPath();
+            bananaGraphics.moveTo(14, 16);
+            bananaGraphics.lineTo(18, 22);
+            bananaGraphics.lineTo(22, 28);
+            bananaGraphics.lineTo(26, 34);
+            bananaGraphics.lineTo(26, 40);
+            bananaGraphics.strokePath();
+            // Línea 3 (inferior)
+            bananaGraphics.beginPath();
+            bananaGraphics.moveTo(16, 24);
+            bananaGraphics.lineTo(20, 30);
+            bananaGraphics.lineTo(24, 36);
+            bananaGraphics.lineTo(28, 42);
+            bananaGraphics.lineTo(28, 48);
+            bananaGraphics.strokePath();
+            
+            // Tallo verde estilo emoji (más pequeño y redondeado)
+            bananaGraphics.fillStyle(BANANA.TEMP_STEM_COLOR, 1); // Verde #90EE90
+            bananaGraphics.lineStyle(1, 0x6B8E23, 1); // Borde verde oscuro
+            // Tallo redondeado
+            bananaGraphics.fillCircle(20, -3, 4); // Círculo pequeño para el tallo
+            bananaGraphics.strokeCircle(20, -3, 4);
             
             // Generar textura una sola vez
             bananaGraphics.generateTexture(ASSETS.TEXTURE_BANANA, bananaWidth, bananaHeight);

@@ -277,12 +277,17 @@ export const ASSETS = {
 };
 
 export const LEVELS = {
-    // Altura objetivo para cada nivel (en píxeles desde el suelo)
-    LEVEL_HEIGHT: 3000, // Altura que debe alcanzar para llegar a la meta
-    
-    // Meta visual
+    // Meta visual (configuración global)
     GOAL_SIZE: 150, // Tamaño del sprite de meta (más grande y visible)
     GOAL_COLLISION_SIZE: 200, // Tamaño del cuerpo de colisión (más grande para facilitar contacto)
+    GOAL_COLOR: 0xFFD700, // Color dorado del sprite
+    GOAL_BORDER_COLOR: 0xFFA500, // Color naranja del borde
+    GOAL_BORDER_WIDTH: 8, // Grosor del borde
+    GOAL_CENTER_CIRCLE_COLOR: 0xFFFFFF, // Color del círculo central
+    GOAL_CENTER_CIRCLE_ALPHA: 0.8, // Transparencia del círculo central
+    GOAL_CENTER_CIRCLE_RADIUS_FACTOR: 0.15, // Factor del radio del círculo (relativo al tamaño)
+    GOAL_DEPTH: 15, // Profundidad de renderizado
+    GOAL_TINT: 0xFFFFFF, // Tinte para hacerlo más visible
     
     // Colores por nivel
     LEVEL_COLORS: [
@@ -537,21 +542,24 @@ export const LEVELS = {
             dirt: 0xB77414
         }
     ],
-    
     // Niveles predefinidos con plataformas en posiciones fijas
     // Cálculos basados en física: JUMP_POWER=-1200, GRAVITY=800, SPEED=300
     // Altura máxima del salto: 900px, Distancia horizontal máxima: 900px
     // Para niños de 5 años, usamos saltos más cortos: vertical 200-400px, horizontal 100-400px
-    // Cada nivel es un array de objetos {x, y, type, hasBanana}
-    // x: factor de posición horizontal (0.0 a 1.0, donde 0.5 es el centro)
-    // y: distancia vertical desde el suelo en píxeles
-    // type: número de variación de plataforma (1-6)
-    // hasBanana: si tiene banana encima
+    // Cada nivel es un objeto con {platforms, goalHeight}
+    // platforms: array de objetos {x, y, type, hasBanana}
+    //   x: factor de posición horizontal (0.0 a 1.0, donde 0.5 es el centro)
+    //   y: distancia vertical desde el suelo en píxeles
+    //   type: número de variación de plataforma (0-5)
+    //   hasBanana: si tiene banana encima
+    // goalHeight: altura desde el suelo hasta la meta en píxeles
     PRESETS: [
         // Nivel 1 - Saltos fáciles y progresivos (vertical: mínimo 300px, horizontal: moderado)
         // Patrón diseñado para niños de 5 años: desplazamientos horizontales suaves (máx 30%)
         // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
+        {
+            goalHeight: 3400, // Altura de la meta desde el suelo
+            platforms: [
             { x: 0.5, y: 200, type: 1, hasBanana: true },   // 280px ancho - Primera plataforma cerca del suelo (centro)
             { x: 0.4, y: 500, type: 2, hasBanana: false },  // 310px ancho - +300px vertical, -10% horizontal (ligera izquierda)
             { x: 0.6, y: 800, type: 1, hasBanana: true },   // 280px ancho - +300px vertical, +20% horizontal (ligera derecha)
@@ -563,10 +571,31 @@ export const LEVELS = {
             { x: 0.6, y: 2600, type: 3, hasBanana: true },   // 340px ancho - +300px vertical, +10% horizontal (derecha suave)
             { x: 0.45, y: 2900, type: 1, hasBanana: false }, // 280px ancho - +300px vertical, -5% horizontal (casi centro)
             { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, plataforma antes de la meta (centro)
-        ],
+            ]
+        },
         // Nivel 2 - Saltos más desafiantes (vertical: mínimo 300px, horizontal: más variado)
         // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
+        {
+            goalHeight: 3400, // Altura de la meta desde el suelo
+            platforms: [
+            { x: 0.5, y: 200, type: 1, hasBanana: true },   // 280px ancho - Primera plataforma cerca del suelo (centro)
+            { x: 0.4, y: 500, type: 2, hasBanana: false },  // 310px ancho - +300px vertical, -10% horizontal (ligera izquierda)
+            { x: 0.6, y: 800, type: 1, hasBanana: true },   // 280px ancho - +300px vertical, +20% horizontal (ligera derecha)
+            { x: 0.5, y: 1100, type: 3, hasBanana: false }, // 340px ancho - +300px vertical, centro (descanso)
+            { x: 0.35, y: 1400, type: 2, hasBanana: true }, // 310px ancho - +300px vertical, -15% horizontal (izquierda moderada)
+            { x: 0.65, y: 1700, type: 1, hasBanana: false }, // 280px ancho - +300px vertical, +15% horizontal (derecha moderada)
+            { x: 0.5, y: 2000, type: 4, hasBanana: true },  // 370px ancho - +300px vertical, centro (descanso)
+            { x: 0.4, y: 2300, type: 2, hasBanana: false }, // 310px ancho - +300px vertical, -10% horizontal (izquierda suave)
+            { x: 0.6, y: 2600, type: 3, hasBanana: true },   // 340px ancho - +300px vertical, +10% horizontal (derecha suave)
+            { x: 0.45, y: 2900, type: 1, hasBanana: false }, // 280px ancho - +300px vertical, -5% horizontal (casi centro)
+            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, plataforma antes de la meta (centro)
+            ]
+        },
+        // Nivel 3 - Saltos más largos (vertical: mínimo 300px, horizontal: variado)
+        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
+        {
+            goalHeight: 3150, // Altura de la meta desde el suelo
+            platforms: [
             { x: 0.5, y: 250, type: 1, hasBanana: true },   // 280px ancho
             { x: 0.2, y: 550, type: 2, hasBanana: false },  // 310px ancho - +300px vertical, -30% horizontal
             { x: 0.8, y: 850, type: 1, hasBanana: true },   // 280px ancho - +300px vertical, +60% horizontal
@@ -577,10 +606,13 @@ export const LEVELS = {
             { x: 0.7, y: 2350, type: 2, hasBanana: false }, // 310px ancho - +300px vertical, +40% horizontal
             { x: 0.5, y: 2650, type: 3, hasBanana: true },  // 340px ancho - +300px vertical, -20% horizontal
             { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, plataforma antes de la meta
-        ],
-        // Nivel 3 - Saltos más largos (vertical: mínimo 300px, horizontal: variado)
+            ]
+        },
+        // Nivel 4 - Patrón más complejo (vertical: mínimo 300px, horizontal: extremos)
         // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
+        {
+            goalHeight: 2900, // Altura de la meta desde el suelo
+            platforms: [
             { x: 0.5, y: 300, type: 2, hasBanana: true },   // 310px ancho
             { x: 0.3, y: 600, type: 3, hasBanana: false },  // 340px ancho - +300px vertical, -20% horizontal
             { x: 0.7, y: 900, type: 2, hasBanana: true },   // 310px ancho - +300px vertical, +40% horizontal
@@ -590,10 +622,13 @@ export const LEVELS = {
             { x: 0.4, y: 2100, type: 3, hasBanana: true },   // 340px ancho - +300px vertical, -40% horizontal
             { x: 0.6, y: 2400, type: 4, hasBanana: false },  // 370px ancho - +300px vertical, +20% horizontal
             { x: 0.5, y: 2700, type: 5, hasBanana: false },  // 400px ancho - +300px vertical, plataforma antes de la meta
-        ],
-        // Nivel 4 - Patrón más complejo (vertical: mínimo 300px, horizontal: extremos)
+            ]
+        },
+        // Nivel 5 - Patrón rosa con saltos variados (vertical: mínimo 300px)
         // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
+        {
+            goalHeight: 2900, // Altura de la meta desde el suelo
+            platforms: [
             { x: 0.5, y: 350, type: 3, hasBanana: true },   // 340px ancho
             { x: 0.2, y: 650, type: 4, hasBanana: false },  // 370px ancho - +300px vertical, -30% horizontal
             { x: 0.8, y: 950, type: 3, hasBanana: true },   // 340px ancho - +300px vertical, +60% horizontal
@@ -601,11 +636,14 @@ export const LEVELS = {
             { x: 0.1, y: 1550, type: 4, hasBanana: true },  // 370px ancho - +300px vertical, -40% horizontal
             { x: 0.9, y: 1850, type: 5, hasBanana: false },  // 400px ancho - +300px vertical, +80% horizontal
             { x: 0.3, y: 2150, type: 4, hasBanana: true },  // 370px ancho - +300px vertical, -60% horizontal
-            { x: 0.5, y: 2450, type: 5, hasBanana: false },  // 400px ancho - +300px vertical, plataforma antes de la meta
-        ],
-        // Nivel 5 - Patrón rosa con saltos variados (vertical: mínimo 300px)
+            { x: 0.5, y: 2700, type: 5, hasBanana: false },  // 400px ancho - +300px vertical, plataforma antes de la meta
+            ]
+        },
+        // Nivel 6 - Patrón turquesa con saltos desafiantes (vertical: mínimo 300px)
         // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
+        {
+            goalHeight: 3100, // Altura de la meta desde el suelo
+            platforms: [
             { x: 0.5, y: 200, type: 2, hasBanana: true },   // 310px ancho - Primera plataforma cerca del suelo
             { x: 0.3, y: 500, type: 3, hasBanana: false },  // 340px ancho - +300px vertical, -20% horizontal
             { x: 0.7, y: 800, type: 4, hasBanana: true },   // 370px ancho - +300px vertical, +40% horizontal
@@ -616,10 +654,13 @@ export const LEVELS = {
             { x: 0.8, y: 2300, type: 2, hasBanana: false }, // 310px ancho - +300px vertical, +60% horizontal
             { x: 0.5, y: 2600, type: 5, hasBanana: true },  // 400px ancho - +300px vertical, centro
             { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, plataforma antes de la meta
-        ],
-        // Nivel 6 - Patrón turquesa con saltos desafiantes (vertical: mínimo 300px)
+            ]
+        },
+        // Nivel 7 - ROJO - Patrón intenso con saltos variados (vertical: mínimo 300px)
         // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
+        {
+            goalHeight: 3150, // Altura de la meta desde el suelo
+            platforms: [
             { x: 0.5, y: 250, type: 3, hasBanana: true },   // 340px ancho - Primera plataforma cerca del suelo
             { x: 0.2, y: 550, type: 4, hasBanana: false },  // 370px ancho - +300px vertical, -30% horizontal
             { x: 0.8, y: 850, type: 5, hasBanana: true },   // 400px ancho - +300px vertical, +60% horizontal
@@ -630,10 +671,13 @@ export const LEVELS = {
             { x: 0.4, y: 2350, type: 4, hasBanana: false }, // 370px ancho - +300px vertical, -30% horizontal
             { x: 0.6, y: 2650, type: 5, hasBanana: true },  // 400px ancho - +300px vertical, +20% horizontal
             { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, plataforma antes de la meta
-        ],
-        // Nivel 7 - ROJO - Patrón intenso con saltos variados (vertical: mínimo 300px)
+            ]
+        },
+        // Nivel 8 - Púrpura - Patrón elegante (vertical: mínimo 300px)
         // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
+        {
+            goalHeight: 3100, // Altura de la meta desde el suelo
+            platforms: [
             { x: 0.5, y: 200, type: 4, hasBanana: true },   // 370px ancho - Primera plataforma cerca del suelo
             { x: 0.3, y: 500, type: 5, hasBanana: false },  // 400px ancho - +300px vertical, -20% horizontal
             { x: 0.7, y: 800, type: 3, hasBanana: true },   // 340px ancho - +300px vertical, +40% horizontal
@@ -644,10 +688,13 @@ export const LEVELS = {
             { x: 0.1, y: 2300, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, -50% horizontal
             { x: 0.9, y: 2600, type: 3, hasBanana: true },  // 340px ancho - +300px vertical, +80% horizontal
             { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, plataforma antes de la meta
-        ],
-        // Nivel 8 - Púrpura - Patrón elegante (vertical: mínimo 300px)
+            ]
+        },
+        // Nivel 9 - Azul - Patrón acuático (vertical: mínimo 300px)
         // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
+        {
+            goalHeight: 3150, // Altura de la meta desde el suelo
+            platforms: [
             { x: 0.5, y: 250, type: 3, hasBanana: true },   // 340px ancho
             { x: 0.4, y: 550, type: 4, hasBanana: false },  // 370px ancho - +300px vertical, -10% horizontal
             { x: 0.6, y: 850, type: 5, hasBanana: true },   // 400px ancho - +300px vertical, +20% horizontal
@@ -658,635 +705,9 @@ export const LEVELS = {
             { x: 0.5, y: 2350, type: 4, hasBanana: false }, // 370px ancho - +300px vertical, centro
             { x: 0.5, y: 2650, type: 5, hasBanana: true },  // 400px ancho - +300px vertical, centro
             { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, plataforma antes de la meta
-        ],
-        // Nivel 9 - Azul - Patrón acuático (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 2, hasBanana: true },   // 310px ancho
-            { x: 0.2, y: 600, type: 5, hasBanana: false },  // 400px ancho - +300px vertical, -30% horizontal
-            { x: 0.8, y: 900, type: 3, hasBanana: true },   // 340px ancho - +300px vertical, +60% horizontal
-            { x: 0.1, y: 1200, type: 4, hasBanana: false }, // 370px ancho - +300px vertical, -40% horizontal
-            { x: 0.9, y: 1500, type: 2, hasBanana: true },  // 310px ancho - +300px vertical, +80% horizontal
-            { x: 0.3, y: 1800, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, -60% horizontal
-            { x: 0.7, y: 2100, type: 4, hasBanana: true },  // 370px ancho - +300px vertical, +40% horizontal
-            { x: 0.4, y: 2400, type: 3, hasBanana: false }, // 340px ancho - +300px vertical, -30% horizontal
-            { x: 0.6, y: 2700, type: 5, hasBanana: true },  // 400px ancho - +300px vertical, +20% horizontal
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, plataforma antes de la meta
-        ],
-        // Nivel 10 - Naranja - Patrón final desafiante (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 350, type: 5, hasBanana: true },   // 400px ancho - Primera plataforma cerca del suelo
-            { x: 0.1, y: 650, type: 4, hasBanana: false },  // 370px ancho - +300px vertical, -40% horizontal
-            { x: 0.9, y: 950, type: 3, hasBanana: true },   // 340px ancho - +300px vertical, +80% horizontal
-            { x: 0.2, y: 1250, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, -70% horizontal
-            { x: 0.8, y: 1550, type: 2, hasBanana: true },  // 310px ancho - +300px vertical, +60% horizontal
-            { x: 0.3, y: 1850, type: 4, hasBanana: false }, // 370px ancho - +300px vertical, -50% horizontal
-            { x: 0.7, y: 2150, type: 5, hasBanana: true },  // 400px ancho - +300px vertical, +40% horizontal
-            { x: 0.4, y: 2450, type: 3, hasBanana: false }, // 340px ancho - +300px vertical, -30% horizontal
-            { x: 0.6, y: 2750, type: 5, hasBanana: true },  // 400px ancho - +300px vertical, +20% horizontal
-            { x: 0.5, y: 3050, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, plataforma antes de la meta
-        ],
-        // Nivel 11 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.3, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.2, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.8, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.3, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 12 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.6, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.7, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.3, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.6, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 13 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.2, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.1, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.9, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.2, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 14 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.7, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.8, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.2, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.7, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 15 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.4, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.3, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.7, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.4, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 16 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.3, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.2, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.8, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.3, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 17 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.6, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.7, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.3, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.6, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 18 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.2, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.1, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.9, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.2, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 19 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.7, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.8, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.2, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.7, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 20 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.4, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.3, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.7, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.4, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 21 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.3, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.2, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.8, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.3, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 22 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.6, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.7, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.3, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.6, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 23 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.2, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.1, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.9, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.2, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 24 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.7, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.8, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.2, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.7, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 25 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.4, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.3, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.7, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.4, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 26 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.3, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.2, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.8, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.3, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 27 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.6, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.7, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.3, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.6, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 28 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.2, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.1, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.9, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.2, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 29 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.7, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.8, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.2, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.7, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 30 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.4, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.3, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.7, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.4, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 31 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.3, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.2, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.8, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.3, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 32 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.6, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.7, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.3, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.6, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 33 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.2, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.1, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.9, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.2, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 34 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.7, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.8, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.2, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.7, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 35 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.4, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.3, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.7, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.4, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 36 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.3, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.2, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.8, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.3, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 37 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.6, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.7, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.3, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.6, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 38 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.2, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.1, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.9, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.2, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 39 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.7, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.8, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.2, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.7, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 40 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.4, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.3, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.7, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.4, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 41 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.3, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.2, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.8, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.3, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 42 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.6, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.7, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.3, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.6, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 43 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.2, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.1, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.9, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.2, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 44 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.7, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.8, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.2, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.7, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 45 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.4, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.3, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.7, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.4, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 46 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.3, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.2, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.8, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.3, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.7, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 47 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.6, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.7, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.3, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.6, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.4, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 48 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 200, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.2, y: 500, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 800, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1100, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.1, y: 1400, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.9, y: 1700, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2000, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.2, y: 2300, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.8, y: 2600, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2900, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3200, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 49 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 250, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.7, y: 550, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 850, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1150, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.8, y: 1450, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.2, y: 1750, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2050, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.7, y: 2350, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.3, y: 2650, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3250, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ],
-        // Nivel 50 - Patrón variado (vertical: mínimo 300px)
-        // type: 0=250px, 1=280px, 2=310px, 3=340px, 4=370px, 5=400px
-        [
-            { x: 0.5, y: 300, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.4, y: 600, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 900, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.5, y: 1200, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.3, y: 1500, type: 5, hasBanana: true }, // 400px ancho
-            { x: 0.7, y: 1800, type: 4, hasBanana: false }, // 370px ancho
-            { x: 0.5, y: 2100, type: 3, hasBanana: true }, // 340px ancho
-            { x: 0.4, y: 2400, type: 2, hasBanana: false }, // 310px ancho
-            { x: 0.6, y: 2700, type: 1, hasBanana: true }, // 280px ancho
-            { x: 0.5, y: 3000, type: 5, hasBanana: false }, // 400px ancho
-            { x: 0.5, y: 3300, type: 5, hasBanana: false }, // 400px ancho - plataforma antes de la meta
-        ]
+            ]
+        },
+
     ]
 };
 
