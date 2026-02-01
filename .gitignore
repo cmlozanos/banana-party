@@ -1,0 +1,31 @@
+# Entorno virtual de Python
+venv/
+env/
+.venv/
+.env/
+
+# Dependencias de Node.js
+node_modules/
+package-lock.json
+yarn.lock
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# Archivos de compilación
+*.zip
+banana-party-game.zip
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace

@@ -1,0 +1,61 @@
+/**
+ * Banana Party - Estilos CSS
+ * Diseño amigable y colorido para niños
+ */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+body {
+    font-family: 'Comic Sans MS', cursive, sans-serif;
+    background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+    margin: 0;
+    padding: 0;
+}
+
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    background: #87CEEB;
+}
+
+/* Animaciones suaves */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+/* Efectos visuales */
+.banana-collected {
+    animation: bounce 0.3s ease;
+}
+
+@keyframes bounce {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "banana-party",
+  "version": "1.0.0",
+  "description": "Videojuego 2D de ascensión vertical para niños",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx http-server -p 8000 -a localhost",
+    "dev": "npx http-server -p 8000 -a localhost -o"
+  },
+  "keywords": [
+    "game",
+    "phaser",
+    "kids",
+    "2d",
+    "platformer"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  }
+}
