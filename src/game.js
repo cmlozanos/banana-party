@@ -360,6 +360,79 @@ class BananaPartyGame extends Phaser.Scene {
         
         // Redondear píxeles para evitar desenfoque al moverse
         this.cameras.main.setRoundPixels(true);
+        
+        // Crear estadísticas de debug solo en localhost
+        this.createDebugStats();
+    }
+    
+    createDebugStats() {
+        // Verificar si estamos en localhost
+        const isLocalhost = window.location.hostname === 'localhost' || 
+                           window.location.hostname === '127.0.0.1' ||
+                           window.location.hostname === '';
+        
+        if (!isLocalhost) {
+            return; // No crear estadísticas si no estamos en localhost
+        }
+        
+        // Crear texto de debug debajo de los elementos de UI (altura y nivel están en Y=20 y Y=70)
+        // Colocarlo en Y=120 para que esté debajo del nivel (Y=70) con un poco de espacio
+        this.debugText = this.add.text(20, 120, '', {
+            fontSize: '16px',
+            fontFamily: 'monospace',
+            fill: '#FFFFFF',
+            stroke: '#000000',
+            strokeThickness: 2,
+            backgroundColor: '#000000',
+            padding: { x: 10, y: 5 }
+        });
+        this.debugText.setScrollFactor(0); // Fijo en pantalla
+        this.debugText.setDepth(200); // Por encima de todo
+        this.debugText.setVisible(true);
+    }
+    
+    updateDebugStats() {
+        if (!this.debugText || !this.debugText.visible) {
+            return;
+        }
+        
+        const player = this.player;
+        if (!player || !player.sprite) {
+            return;
+        }
+        
+        // Obtener estado del personaje
+        const isGrounded = player.isGrounded;
+        const velocityX = player.sprite.body.velocity.x;
+        const touchingDown = player.sprite.body.touching.down;
+        const blockedDown = player.sprite.body.blocked.down;
+        
+        // Determinar estado vertical
+        let estadoVertical = 'AIRE';
+        if (isGrounded || touchingDown || blockedDown) {
+            estadoVertical = 'SUELO';
+        }
+        
+        // Determinar dirección horizontal
+        let direccionHorizontal = 'NINGUNA';
+        if (Math.abs(velocityX) > PLAYER.IDLE_VELOCITY_THRESHOLD) {
+            if (velocityX < 0) {
+                direccionHorizontal = 'IZQUIERDA';
+            } else {
+                direccionHorizontal = 'DERECHA';
+            }
+        }
+        
+        // Actualizar texto
+        const debugInfo = [
+            `Estado: ${estadoVertical}`,
+            `Dirección: ${direccionHorizontal}`,
+            `Velocidad X: ${velocityX.toFixed(1)}`,
+            `Touching Down: ${touchingDown}`,
+            `Blocked Down: ${blockedDown}`
+        ].join('\n');
+        
+        this.debugText.setText(debugInfo);
     }
 
     // Función auxiliar para configurar el cuerpo de colisión de una plataforma
@@ -651,6 +724,9 @@ class BananaPartyGame extends Phaser.Scene {
             const heightFromGround = groundY - playerY;
             this.uiManager.updateHeight(Math.floor(heightFromGround / WORLD.METERS_DIVISOR));
         }
+        
+        // Actualizar estadísticas de debug
+        this.updateDebugStats();
         
         // Con niveles predefinidos, no necesitamos generar plataformas dinámicamente
         // Las plataformas ya están todas creadas según el preset del nivel

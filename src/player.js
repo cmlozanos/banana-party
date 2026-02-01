@@ -38,6 +38,8 @@ export class Player {
         this.jumpPower = PLAYER.JUMP_POWER;
         this.isGrounded = false;
         this.currentAnimation = 'idle';
+        this.wasGroundedLastFrame = false; // Para estabilizar la detección
+        this.groundedFrames = 0; // Contador de frames consecutivos en el suelo
         this.setupAnimations();
         this.sprite.setBounce(PLAYER.BOUNCE);
         this.sprite.body.setSize(PLAYER.BODY_WIDTH, PLAYER.BODY_HEIGHT);
@@ -63,8 +65,40 @@ export class Player {
 
     update(cursors) {
         const touchingDown = this.sprite.body.touching.down;
+        const blockedDown = this.sprite.body.blocked.down;
         const velocityY = this.sprite.body.velocity.y;
-        this.isGrounded = touchingDown || (Math.abs(velocityY) < PLAYER.GROUND_VELOCITY_THRESHOLD && this.sprite.body.blocked.down);
+        
+        // Detección estable de suelo usando blockedDown como indicador principal
+        // blockedDown es más estable que touchingDown porque indica bloqueo de colisión
+        const definitelyOnGround = blockedDown || (touchingDown && Math.abs(velocityY) < 10);
+        
+        // Sistema de estabilización: usar contador de frames para evitar parpadeo
+        if (definitelyOnGround) {
+            this.groundedFrames++;
+            // Requerir al menos 2 frames consecutivos para considerar como suelo estable
+            if (this.groundedFrames >= 2) {
+                this.isGrounded = true;
+            } else if (this.wasGroundedLastFrame) {
+                // Si estaba en el suelo antes, mantenerlo aunque sea solo 1 frame
+                this.isGrounded = true;
+            }
+        } else if (velocityY > 50) {
+            // Si está cayendo rápidamente, definitivamente en el aire
+            this.isGrounded = false;
+            this.groundedFrames = 0;
+        } else if (this.wasGroundedLastFrame && Math.abs(velocityY) < 30) {
+            // Si estaba en el suelo y la velocidad es pequeña, mantener en suelo
+            // Esto previene cambios rápidos cuando hay pequeñas oscilaciones
+            this.isGrounded = true;
+            this.groundedFrames = Math.min(this.groundedFrames + 1, 5); // Incrementar pero limitar
+        } else {
+            // En caso de duda, considerar en el aire
+            this.isGrounded = false;
+            this.groundedFrames = 0;
+        }
+        
+        // Guardar estado para el siguiente frame
+        this.wasGroundedLastFrame = this.isGrounded;
         
         if (cursors.left.isDown) {
             this.sprite.setVelocityX(-this.speed);
