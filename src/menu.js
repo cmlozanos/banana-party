@@ -20,7 +20,13 @@ export class LevelSelectMenu extends Phaser.Scene {
         const levelCount = LEVELS.PRESETS.length;
         const buttonHeight = 80;
         const buttonSpacingY = 120;
-        const cols = 5; // Más columnas en el grid
+        const buttonWidth = 200;
+        const buttonSpacingX = 220;
+        
+        // Calcular número de columnas según el ancho de pantalla
+        // Dejar margen de 40px a cada lado, calcular cuántos botones caben
+        const availableWidth = width - 80; // Margen de 40px a cada lado
+        const cols = Math.floor(availableWidth / buttonSpacingX);
         const rows = Math.ceil(levelCount / cols);
         
         // Calcular altura total del contenido
@@ -42,10 +48,6 @@ export class LevelSelectMenu extends Phaser.Scene {
         });
         title.setOrigin(0.5);
         
-        // Crear botones para cada nivel en formato grid
-        const buttonWidth = 200; // Botones más pequeños para más columnas
-        const buttonSpacingX = 220; // Espaciado horizontal entre botones
-        
         // Calcular posición inicial para centrar el grid
         const gridWidth = (cols - 1) * buttonSpacingX + buttonWidth;
         const startX = (width - gridWidth) / 2 + buttonWidth / 2;
@@ -61,7 +63,7 @@ export class LevelSelectMenu extends Phaser.Scene {
             const y = startY + (row * buttonSpacingY);
             
             const levelNumber = i + 1;
-            const levelColors = LEVELS.LEVEL_COLORS[i];
+            const levelColors = LEVELS.LEVEL_COLORS[i % LEVELS.LEVEL_COLORS.length];
             
             // Crear fondo del botón con color del nivel
             const buttonBg = this.add.graphics();

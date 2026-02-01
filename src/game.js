@@ -75,7 +75,7 @@ class BananaPartyGame extends Phaser.Scene {
         const groundY = worldHeight - WORLD.GROUND_Y_OFFSET;
         
         // Obtener el preset del nivel actual para usar su goalHeight
-        const levelIndex = (this.currentLevel - 1) % LEVELS.PRESETS.length;
+        const levelIndex = Math.min(this.currentLevel - 1, LEVELS.PRESETS.length - 1);
         const levelPreset = LEVELS.PRESETS[levelIndex];
         const goalHeight = levelPreset.goalHeight || 3000; // Fallback a 3000 si no existe
         
@@ -540,7 +540,7 @@ class BananaPartyGame extends Phaser.Scene {
         const groundY = worldHeight - WORLD.GROUND_Y_OFFSET;
         
         // Obtener el preset del nivel actual
-        const levelIndex = (this.currentLevel - 1) % LEVELS.PRESETS.length;
+        const levelIndex = Math.min(this.currentLevel - 1, LEVELS.PRESETS.length - 1);
         const levelPreset = LEVELS.PRESETS[levelIndex];
         
         // Limpiar plataformas existentes

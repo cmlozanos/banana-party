@@ -707,7 +707,680 @@ export const LEVELS = {
             { x: 0.5, y: 2950, type: 5, hasBanana: false }, // 400px ancho - +300px vertical, plataforma antes de la meta
             ]
         },
-
+        // Nivel 10 - Patrón variado
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 2, hasBanana: true },
+            { x: 0.3, y: 500, type: 3, hasBanana: false },
+            { x: 0.7, y: 800, type: 2, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.2, y: 1400, type: 3, hasBanana: true },
+            { x: 0.8, y: 1700, type: 4, hasBanana: false },
+            { x: 0.4, y: 2000, type: 3, hasBanana: true },
+            { x: 0.6, y: 2300, type: 4, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 11 - Patrón zigzag
+        {
+            goalHeight: 3300,
+            platforms: [
+            { x: 0.5, y: 200, type: 1, hasBanana: true },
+            { x: 0.3, y: 500, type: 2, hasBanana: false },
+            { x: 0.7, y: 800, type: 1, hasBanana: true },
+            { x: 0.3, y: 1100, type: 3, hasBanana: false },
+            { x: 0.7, y: 1400, type: 2, hasBanana: true },
+            { x: 0.3, y: 1700, type: 4, hasBanana: false },
+            { x: 0.7, y: 2000, type: 3, hasBanana: true },
+            { x: 0.5, y: 2300, type: 4, hasBanana: false },
+            { x: 0.3, y: 2600, type: 5, hasBanana: true },
+            { x: 0.7, y: 2900, type: 5, hasBanana: false },
+            { x: 0.5, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 12 - Patrón centro-extremos
+        {
+            goalHeight: 3100,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.2, y: 500, type: 2, hasBanana: false },
+            { x: 0.8, y: 800, type: 2, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.1, y: 1400, type: 3, hasBanana: true },
+            { x: 0.9, y: 1700, type: 3, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.2, y: 2300, type: 4, hasBanana: false },
+            { x: 0.8, y: 2600, type: 4, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 13 - Patrón serpiente
+        {
+            goalHeight: 3400,
+            platforms: [
+            { x: 0.2, y: 200, type: 1, hasBanana: true },
+            { x: 0.4, y: 500, type: 2, hasBanana: false },
+            { x: 0.6, y: 800, type: 1, hasBanana: true },
+            { x: 0.8, y: 1100, type: 3, hasBanana: false },
+            { x: 0.6, y: 1400, type: 2, hasBanana: true },
+            { x: 0.4, y: 1700, type: 4, hasBanana: false },
+            { x: 0.2, y: 2000, type: 3, hasBanana: true },
+            { x: 0.4, y: 2300, type: 4, hasBanana: false },
+            { x: 0.6, y: 2600, type: 5, hasBanana: true },
+            { x: 0.8, y: 2900, type: 5, hasBanana: false },
+            { x: 0.5, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 14 - Patrón progresivo
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 2, hasBanana: true },
+            { x: 0.45, y: 500, type: 2, hasBanana: false },
+            { x: 0.4, y: 800, type: 3, hasBanana: true },
+            { x: 0.35, y: 1100, type: 3, hasBanana: false },
+            { x: 0.3, y: 1400, type: 4, hasBanana: true },
+            { x: 0.25, y: 1700, type: 4, hasBanana: false },
+            { x: 0.3, y: 2000, type: 5, hasBanana: true },
+            { x: 0.4, y: 2300, type: 5, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 15 - Patrón alternado
+        {
+            goalHeight: 3300,
+            platforms: [
+            { x: 0.3, y: 200, type: 1, hasBanana: true },
+            { x: 0.7, y: 500, type: 2, hasBanana: false },
+            { x: 0.3, y: 800, type: 3, hasBanana: true },
+            { x: 0.7, y: 1100, type: 2, hasBanana: false },
+            { x: 0.3, y: 1400, type: 4, hasBanana: true },
+            { x: 0.7, y: 1700, type: 3, hasBanana: false },
+            { x: 0.3, y: 2000, type: 5, hasBanana: true },
+            { x: 0.7, y: 2300, type: 4, hasBanana: false },
+            { x: 0.3, y: 2600, type: 5, hasBanana: true },
+            { x: 0.7, y: 2900, type: 5, hasBanana: false },
+            { x: 0.5, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 16 - Patrón variado
+        {
+            goalHeight: 3100,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.4, y: 500, type: 2, hasBanana: false },
+            { x: 0.6, y: 800, type: 3, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.35, y: 1400, type: 3, hasBanana: true },
+            { x: 0.65, y: 1700, type: 4, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.4, y: 2300, type: 4, hasBanana: false },
+            { x: 0.6, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 17 - Patrón zigzag amplio
+        {
+            goalHeight: 3400,
+            platforms: [
+            { x: 0.2, y: 200, type: 2, hasBanana: true },
+            { x: 0.8, y: 500, type: 2, hasBanana: false },
+            { x: 0.2, y: 800, type: 3, hasBanana: true },
+            { x: 0.8, y: 1100, type: 3, hasBanana: false },
+            { x: 0.2, y: 1400, type: 4, hasBanana: true },
+            { x: 0.8, y: 1700, type: 4, hasBanana: false },
+            { x: 0.2, y: 2000, type: 5, hasBanana: true },
+            { x: 0.8, y: 2300, type: 5, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.2, y: 2900, type: 5, hasBanana: false },
+            { x: 0.8, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 18 - Patrón centro con variaciones
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 1, hasBanana: true },
+            { x: 0.5, y: 500, type: 2, hasBanana: false },
+            { x: 0.45, y: 800, type: 3, hasBanana: true },
+            { x: 0.55, y: 1100, type: 3, hasBanana: false },
+            { x: 0.5, y: 1400, type: 4, hasBanana: true },
+            { x: 0.4, y: 1700, type: 4, hasBanana: false },
+            { x: 0.6, y: 2000, type: 4, hasBanana: true },
+            { x: 0.5, y: 2300, type: 5, hasBanana: false },
+            { x: 0.45, y: 2600, type: 5, hasBanana: true },
+            { x: 0.55, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 19 - Patrón variado
+        {
+            goalHeight: 3300,
+            platforms: [
+            { x: 0.5, y: 200, type: 2, hasBanana: true },
+            { x: 0.3, y: 500, type: 3, hasBanana: false },
+            { x: 0.7, y: 800, type: 2, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.2, y: 1400, type: 3, hasBanana: true },
+            { x: 0.8, y: 1700, type: 4, hasBanana: false },
+            { x: 0.4, y: 2000, type: 4, hasBanana: true },
+            { x: 0.6, y: 2300, type: 5, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.3, y: 2900, type: 5, hasBanana: false },
+            { x: 0.7, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 20 - Patrón equilibrado
+        {
+            goalHeight: 3100,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.4, y: 500, type: 3, hasBanana: false },
+            { x: 0.6, y: 800, type: 3, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.35, y: 1400, type: 4, hasBanana: true },
+            { x: 0.65, y: 1700, type: 4, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.4, y: 2300, type: 5, hasBanana: false },
+            { x: 0.6, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 21 - Patrón variado
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 2, hasBanana: true },
+            { x: 0.35, y: 500, type: 3, hasBanana: false },
+            { x: 0.65, y: 800, type: 2, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.3, y: 1400, type: 3, hasBanana: true },
+            { x: 0.7, y: 1700, type: 4, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.4, y: 2300, type: 4, hasBanana: false },
+            { x: 0.6, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 22 - Patrón zigzag
+        {
+            goalHeight: 3300,
+            platforms: [
+            { x: 0.4, y: 200, type: 1, hasBanana: true },
+            { x: 0.6, y: 500, type: 2, hasBanana: false },
+            { x: 0.4, y: 800, type: 3, hasBanana: true },
+            { x: 0.6, y: 1100, type: 2, hasBanana: false },
+            { x: 0.4, y: 1400, type: 4, hasBanana: true },
+            { x: 0.6, y: 1700, type: 3, hasBanana: false },
+            { x: 0.4, y: 2000, type: 5, hasBanana: true },
+            { x: 0.6, y: 2300, type: 4, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.4, y: 2900, type: 5, hasBanana: false },
+            { x: 0.6, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 23 - Patrón centro-extremos
+        {
+            goalHeight: 3100,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.25, y: 500, type: 2, hasBanana: false },
+            { x: 0.75, y: 800, type: 2, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.15, y: 1400, type: 3, hasBanana: true },
+            { x: 0.85, y: 1700, type: 3, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.25, y: 2300, type: 4, hasBanana: false },
+            { x: 0.75, y: 2600, type: 4, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 24 - Patrón serpiente
+        {
+            goalHeight: 3400,
+            platforms: [
+            { x: 0.25, y: 200, type: 1, hasBanana: true },
+            { x: 0.45, y: 500, type: 2, hasBanana: false },
+            { x: 0.65, y: 800, type: 1, hasBanana: true },
+            { x: 0.75, y: 1100, type: 3, hasBanana: false },
+            { x: 0.65, y: 1400, type: 2, hasBanana: true },
+            { x: 0.45, y: 1700, type: 4, hasBanana: false },
+            { x: 0.25, y: 2000, type: 3, hasBanana: true },
+            { x: 0.45, y: 2300, type: 4, hasBanana: false },
+            { x: 0.65, y: 2600, type: 5, hasBanana: true },
+            { x: 0.75, y: 2900, type: 5, hasBanana: false },
+            { x: 0.5, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 25 - Patrón progresivo
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 2, hasBanana: true },
+            { x: 0.48, y: 500, type: 2, hasBanana: false },
+            { x: 0.45, y: 800, type: 3, hasBanana: true },
+            { x: 0.42, y: 1100, type: 3, hasBanana: false },
+            { x: 0.38, y: 1400, type: 4, hasBanana: true },
+            { x: 0.35, y: 1700, type: 4, hasBanana: false },
+            { x: 0.38, y: 2000, type: 5, hasBanana: true },
+            { x: 0.45, y: 2300, type: 5, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 26 - Patrón alternado
+        {
+            goalHeight: 3300,
+            platforms: [
+            { x: 0.35, y: 200, type: 1, hasBanana: true },
+            { x: 0.65, y: 500, type: 2, hasBanana: false },
+            { x: 0.35, y: 800, type: 3, hasBanana: true },
+            { x: 0.65, y: 1100, type: 2, hasBanana: false },
+            { x: 0.35, y: 1400, type: 4, hasBanana: true },
+            { x: 0.65, y: 1700, type: 3, hasBanana: false },
+            { x: 0.35, y: 2000, type: 5, hasBanana: true },
+            { x: 0.65, y: 2300, type: 4, hasBanana: false },
+            { x: 0.35, y: 2600, type: 5, hasBanana: true },
+            { x: 0.65, y: 2900, type: 5, hasBanana: false },
+            { x: 0.5, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 27 - Patrón variado
+        {
+            goalHeight: 3100,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.42, y: 500, type: 2, hasBanana: false },
+            { x: 0.58, y: 800, type: 3, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.38, y: 1400, type: 3, hasBanana: true },
+            { x: 0.62, y: 1700, type: 4, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.42, y: 2300, type: 4, hasBanana: false },
+            { x: 0.58, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 28 - Patrón zigzag amplio
+        {
+            goalHeight: 3400,
+            platforms: [
+            { x: 0.25, y: 200, type: 2, hasBanana: true },
+            { x: 0.75, y: 500, type: 2, hasBanana: false },
+            { x: 0.25, y: 800, type: 3, hasBanana: true },
+            { x: 0.75, y: 1100, type: 3, hasBanana: false },
+            { x: 0.25, y: 1400, type: 4, hasBanana: true },
+            { x: 0.75, y: 1700, type: 4, hasBanana: false },
+            { x: 0.25, y: 2000, type: 5, hasBanana: true },
+            { x: 0.75, y: 2300, type: 5, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.25, y: 2900, type: 5, hasBanana: false },
+            { x: 0.75, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 29 - Patrón centro con variaciones
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 1, hasBanana: true },
+            { x: 0.5, y: 500, type: 2, hasBanana: false },
+            { x: 0.48, y: 800, type: 3, hasBanana: true },
+            { x: 0.52, y: 1100, type: 3, hasBanana: false },
+            { x: 0.5, y: 1400, type: 4, hasBanana: true },
+            { x: 0.42, y: 1700, type: 4, hasBanana: false },
+            { x: 0.58, y: 2000, type: 4, hasBanana: true },
+            { x: 0.5, y: 2300, type: 5, hasBanana: false },
+            { x: 0.48, y: 2600, type: 5, hasBanana: true },
+            { x: 0.52, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 30 - Patrón variado
+        {
+            goalHeight: 3300,
+            platforms: [
+            { x: 0.5, y: 200, type: 2, hasBanana: true },
+            { x: 0.32, y: 500, type: 3, hasBanana: false },
+            { x: 0.68, y: 800, type: 2, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.22, y: 1400, type: 3, hasBanana: true },
+            { x: 0.78, y: 1700, type: 4, hasBanana: false },
+            { x: 0.42, y: 2000, type: 4, hasBanana: true },
+            { x: 0.58, y: 2300, type: 5, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.32, y: 2900, type: 5, hasBanana: false },
+            { x: 0.68, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 31 - Patrón equilibrado
+        {
+            goalHeight: 3100,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.42, y: 500, type: 3, hasBanana: false },
+            { x: 0.58, y: 800, type: 3, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.38, y: 1400, type: 4, hasBanana: true },
+            { x: 0.62, y: 1700, type: 4, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.42, y: 2300, type: 5, hasBanana: false },
+            { x: 0.58, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 32 - Patrón variado
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 2, hasBanana: true },
+            { x: 0.38, y: 500, type: 3, hasBanana: false },
+            { x: 0.62, y: 800, type: 2, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.3, y: 1400, type: 3, hasBanana: true },
+            { x: 0.7, y: 1700, type: 4, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.4, y: 2300, type: 4, hasBanana: false },
+            { x: 0.6, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 33 - Patrón zigzag
+        {
+            goalHeight: 3300,
+            platforms: [
+            { x: 0.45, y: 200, type: 1, hasBanana: true },
+            { x: 0.55, y: 500, type: 2, hasBanana: false },
+            { x: 0.45, y: 800, type: 3, hasBanana: true },
+            { x: 0.55, y: 1100, type: 2, hasBanana: false },
+            { x: 0.45, y: 1400, type: 4, hasBanana: true },
+            { x: 0.55, y: 1700, type: 3, hasBanana: false },
+            { x: 0.45, y: 2000, type: 5, hasBanana: true },
+            { x: 0.55, y: 2300, type: 4, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.45, y: 2900, type: 5, hasBanana: false },
+            { x: 0.55, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 34 - Patrón centro-extremos
+        {
+            goalHeight: 3100,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.28, y: 500, type: 2, hasBanana: false },
+            { x: 0.72, y: 800, type: 2, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.18, y: 1400, type: 3, hasBanana: true },
+            { x: 0.82, y: 1700, type: 3, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.28, y: 2300, type: 4, hasBanana: false },
+            { x: 0.72, y: 2600, type: 4, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 35 - Patrón serpiente
+        {
+            goalHeight: 3400,
+            platforms: [
+            { x: 0.28, y: 200, type: 1, hasBanana: true },
+            { x: 0.48, y: 500, type: 2, hasBanana: false },
+            { x: 0.68, y: 800, type: 1, hasBanana: true },
+            { x: 0.78, y: 1100, type: 3, hasBanana: false },
+            { x: 0.68, y: 1400, type: 2, hasBanana: true },
+            { x: 0.48, y: 1700, type: 4, hasBanana: false },
+            { x: 0.28, y: 2000, type: 3, hasBanana: true },
+            { x: 0.48, y: 2300, type: 4, hasBanana: false },
+            { x: 0.68, y: 2600, type: 5, hasBanana: true },
+            { x: 0.78, y: 2900, type: 5, hasBanana: false },
+            { x: 0.5, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 36 - Patrón progresivo
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 2, hasBanana: true },
+            { x: 0.47, y: 500, type: 2, hasBanana: false },
+            { x: 0.44, y: 800, type: 3, hasBanana: true },
+            { x: 0.41, y: 1100, type: 3, hasBanana: false },
+            { x: 0.37, y: 1400, type: 4, hasBanana: true },
+            { x: 0.34, y: 1700, type: 4, hasBanana: false },
+            { x: 0.37, y: 2000, type: 5, hasBanana: true },
+            { x: 0.44, y: 2300, type: 5, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 37 - Patrón alternado
+        {
+            goalHeight: 3300,
+            platforms: [
+            { x: 0.38, y: 200, type: 1, hasBanana: true },
+            { x: 0.62, y: 500, type: 2, hasBanana: false },
+            { x: 0.38, y: 800, type: 3, hasBanana: true },
+            { x: 0.62, y: 1100, type: 2, hasBanana: false },
+            { x: 0.38, y: 1400, type: 4, hasBanana: true },
+            { x: 0.62, y: 1700, type: 3, hasBanana: false },
+            { x: 0.38, y: 2000, type: 5, hasBanana: true },
+            { x: 0.62, y: 2300, type: 4, hasBanana: false },
+            { x: 0.38, y: 2600, type: 5, hasBanana: true },
+            { x: 0.62, y: 2900, type: 5, hasBanana: false },
+            { x: 0.5, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 38 - Patrón variado
+        {
+            goalHeight: 3100,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.41, y: 500, type: 2, hasBanana: false },
+            { x: 0.59, y: 800, type: 3, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.37, y: 1400, type: 3, hasBanana: true },
+            { x: 0.63, y: 1700, type: 4, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.41, y: 2300, type: 4, hasBanana: false },
+            { x: 0.59, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 39 - Patrón zigzag amplio
+        {
+            goalHeight: 3400,
+            platforms: [
+            { x: 0.27, y: 200, type: 2, hasBanana: true },
+            { x: 0.73, y: 500, type: 2, hasBanana: false },
+            { x: 0.27, y: 800, type: 3, hasBanana: true },
+            { x: 0.73, y: 1100, type: 3, hasBanana: false },
+            { x: 0.27, y: 1400, type: 4, hasBanana: true },
+            { x: 0.73, y: 1700, type: 4, hasBanana: false },
+            { x: 0.27, y: 2000, type: 5, hasBanana: true },
+            { x: 0.73, y: 2300, type: 5, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.27, y: 2900, type: 5, hasBanana: false },
+            { x: 0.73, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 40 - Patrón centro con variaciones
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 1, hasBanana: true },
+            { x: 0.5, y: 500, type: 2, hasBanana: false },
+            { x: 0.47, y: 800, type: 3, hasBanana: true },
+            { x: 0.53, y: 1100, type: 3, hasBanana: false },
+            { x: 0.5, y: 1400, type: 4, hasBanana: true },
+            { x: 0.43, y: 1700, type: 4, hasBanana: false },
+            { x: 0.57, y: 2000, type: 4, hasBanana: true },
+            { x: 0.5, y: 2300, type: 5, hasBanana: false },
+            { x: 0.47, y: 2600, type: 5, hasBanana: true },
+            { x: 0.53, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 41 - Patrón variado
+        {
+            goalHeight: 3300,
+            platforms: [
+            { x: 0.5, y: 200, type: 2, hasBanana: true },
+            { x: 0.33, y: 500, type: 3, hasBanana: false },
+            { x: 0.67, y: 800, type: 2, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.23, y: 1400, type: 3, hasBanana: true },
+            { x: 0.77, y: 1700, type: 4, hasBanana: false },
+            { x: 0.43, y: 2000, type: 4, hasBanana: true },
+            { x: 0.57, y: 2300, type: 5, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.33, y: 2900, type: 5, hasBanana: false },
+            { x: 0.67, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 42 - Patrón equilibrado
+        {
+            goalHeight: 3100,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.43, y: 500, type: 3, hasBanana: false },
+            { x: 0.57, y: 800, type: 3, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.39, y: 1400, type: 4, hasBanana: true },
+            { x: 0.61, y: 1700, type: 4, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.43, y: 2300, type: 5, hasBanana: false },
+            { x: 0.57, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 43 - Patrón variado
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 2, hasBanana: true },
+            { x: 0.39, y: 500, type: 3, hasBanana: false },
+            { x: 0.61, y: 800, type: 2, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.31, y: 1400, type: 3, hasBanana: true },
+            { x: 0.69, y: 1700, type: 4, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.41, y: 2300, type: 4, hasBanana: false },
+            { x: 0.59, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 44 - Patrón zigzag
+        {
+            goalHeight: 3300,
+            platforms: [
+            { x: 0.46, y: 200, type: 1, hasBanana: true },
+            { x: 0.54, y: 500, type: 2, hasBanana: false },
+            { x: 0.46, y: 800, type: 3, hasBanana: true },
+            { x: 0.54, y: 1100, type: 2, hasBanana: false },
+            { x: 0.46, y: 1400, type: 4, hasBanana: true },
+            { x: 0.54, y: 1700, type: 3, hasBanana: false },
+            { x: 0.46, y: 2000, type: 5, hasBanana: true },
+            { x: 0.54, y: 2300, type: 4, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.46, y: 2900, type: 5, hasBanana: false },
+            { x: 0.54, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 45 - Patrón centro-extremos
+        {
+            goalHeight: 3100,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.29, y: 500, type: 2, hasBanana: false },
+            { x: 0.71, y: 800, type: 2, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.19, y: 1400, type: 3, hasBanana: true },
+            { x: 0.81, y: 1700, type: 3, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.29, y: 2300, type: 4, hasBanana: false },
+            { x: 0.71, y: 2600, type: 4, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 46 - Patrón serpiente
+        {
+            goalHeight: 3400,
+            platforms: [
+            { x: 0.29, y: 200, type: 1, hasBanana: true },
+            { x: 0.49, y: 500, type: 2, hasBanana: false },
+            { x: 0.69, y: 800, type: 1, hasBanana: true },
+            { x: 0.79, y: 1100, type: 3, hasBanana: false },
+            { x: 0.69, y: 1400, type: 2, hasBanana: true },
+            { x: 0.49, y: 1700, type: 4, hasBanana: false },
+            { x: 0.29, y: 2000, type: 3, hasBanana: true },
+            { x: 0.49, y: 2300, type: 4, hasBanana: false },
+            { x: 0.69, y: 2600, type: 5, hasBanana: true },
+            { x: 0.79, y: 2900, type: 5, hasBanana: false },
+            { x: 0.5, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 47 - Patrón progresivo
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 2, hasBanana: true },
+            { x: 0.46, y: 500, type: 2, hasBanana: false },
+            { x: 0.43, y: 800, type: 3, hasBanana: true },
+            { x: 0.4, y: 1100, type: 3, hasBanana: false },
+            { x: 0.36, y: 1400, type: 4, hasBanana: true },
+            { x: 0.33, y: 1700, type: 4, hasBanana: false },
+            { x: 0.36, y: 2000, type: 5, hasBanana: true },
+            { x: 0.43, y: 2300, type: 5, hasBanana: false },
+            { x: 0.5, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 48 - Patrón alternado
+        {
+            goalHeight: 3300,
+            platforms: [
+            { x: 0.39, y: 200, type: 1, hasBanana: true },
+            { x: 0.61, y: 500, type: 2, hasBanana: false },
+            { x: 0.39, y: 800, type: 3, hasBanana: true },
+            { x: 0.61, y: 1100, type: 2, hasBanana: false },
+            { x: 0.39, y: 1400, type: 4, hasBanana: true },
+            { x: 0.61, y: 1700, type: 3, hasBanana: false },
+            { x: 0.39, y: 2000, type: 5, hasBanana: true },
+            { x: 0.61, y: 2300, type: 4, hasBanana: false },
+            { x: 0.39, y: 2600, type: 5, hasBanana: true },
+            { x: 0.61, y: 2900, type: 5, hasBanana: false },
+            { x: 0.5, y: 3200, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 49 - Patrón variado
+        {
+            goalHeight: 3100,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.4, y: 500, type: 2, hasBanana: false },
+            { x: 0.6, y: 800, type: 3, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.36, y: 1400, type: 3, hasBanana: true },
+            { x: 0.64, y: 1700, type: 4, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.4, y: 2300, type: 4, hasBanana: false },
+            { x: 0.6, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        },
+        // Nivel 50 - Patrón final equilibrado
+        {
+            goalHeight: 3200,
+            platforms: [
+            { x: 0.5, y: 200, type: 3, hasBanana: true },
+            { x: 0.44, y: 500, type: 3, hasBanana: false },
+            { x: 0.56, y: 800, type: 3, hasBanana: true },
+            { x: 0.5, y: 1100, type: 4, hasBanana: false },
+            { x: 0.4, y: 1400, type: 4, hasBanana: true },
+            { x: 0.6, y: 1700, type: 4, hasBanana: false },
+            { x: 0.5, y: 2000, type: 5, hasBanana: true },
+            { x: 0.44, y: 2300, type: 5, hasBanana: false },
+            { x: 0.56, y: 2600, type: 5, hasBanana: true },
+            { x: 0.5, y: 2900, type: 5, hasBanana: false },
+            ]
+        }
     ]
 };
 
