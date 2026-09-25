@@ -36,6 +36,16 @@ body {
     background: #87CEEB;
 }
 
+canvas { display: block; touch-action: none; }
+[hidden] { display: none !important; }
+#home-link { position: fixed; top: 8px; left: 8px; z-index: 5; width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; text-decoration: none; border-radius: 14px; background: #173d30; color: white; font: bold 36px sans-serif; }
+#touch-controls { position: fixed; left: 12px; right: 12px; bottom: max(12px, env(safe-area-inset-bottom)); display: flex; gap: 12px; pointer-events: none; z-index: 4; }
+#touch-controls button { width: 64px; height: 64px; border: 3px solid white; border-radius: 20px; color: white; background: #173d30; font: bold 32px sans-serif; pointer-events: auto; touch-action: none; user-select: none; -webkit-user-select: none; }
+#touch-controls button:last-child { margin-left: auto; background: #8c4e05; }
+#touch-controls button.pressed { transform: scale(.94); background: #346d43; }
+#load-error { position: fixed; inset: 25% 12px auto; background: white; padding: 24px; z-index: 8; }
+@media (max-height: 440px) { #touch-controls button { width: 54px; height: 54px; } }
+
 /* Animaciones suaves */
 @keyframes float {
     0%, 100% {

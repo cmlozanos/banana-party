@@ -6,7 +6,6 @@ env/
 
 # Dependencias de Node.js
 node_modules/
-package-lock.json
 yarn.lock
 
 # Archivos del sistema

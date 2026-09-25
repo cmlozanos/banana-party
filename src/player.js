@@ -3,6 +3,7 @@
  */
 
 import { PLAYER } from './constants.js';
+import { touchInput } from './controls.js';
 
 export class Player {
     constructor(scene, x, y) {
@@ -100,11 +101,11 @@ export class Player {
         // Guardar estado para el siguiente frame
         this.wasGroundedLastFrame = this.isGrounded;
         
-        if (cursors.left.isDown) {
+        if (cursors.left.isDown || touchInput.left) {
             this.sprite.setVelocityX(-this.speed);
             this.setAnimation('caminar');
             this.sprite.setFlipX(true);
-        } else if (cursors.right.isDown) {
+        } else if (cursors.right.isDown || touchInput.right) {
             this.sprite.setVelocityX(this.speed);
             this.setAnimation('caminar');
             this.sprite.setFlipX(false);
@@ -115,7 +116,9 @@ export class Player {
             }
         }
         
-        if (Phaser.Input.Keyboard.JustDown(cursors.up) && this.isGrounded) {
+        const jumpRequested = Phaser.Input.Keyboard.JustDown(cursors.up) || touchInput.jump;
+        touchInput.jump = false;
+        if (jumpRequested && this.isGrounded) {
             this.sprite.setVelocityY(this.jumpPower);
             this.setAnimation('salto');
             this.isGrounded = false;

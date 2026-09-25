@@ -1,5 +1,37 @@
 # 🍌 Banana Party - Videojuego 2D para Niños
 
+## Compatibilidad y acceso educativo (25 septiembre 2026)
+
+Adaptación aprobada: funciona como sitio estático de GitHub Pages, sin Ubuntu,
+CDN ni fuentes remotas. Salir conduce a https://cmlozanos.github.io/games/.
+Phaser 3.70.0 se distribuye localmente sin modificaciones y con su licencia MIT
+en `vendor/LICENSE-Phaser.txt`. Los recursos gráficos del juego siguen siendo propios.
+
+- Retos del sistema compartido al entrar y cada 10 minutos de reloj real; se
+  pausa el motor completo y se limpian teclas y dedos antes de reanudar.
+- Botones táctiles independientes ← → ↑, teclado conservado y selector de
+  niveles desplazable con el dedo. El botón ▦ vuelve al selector, ⌂ sale al portal.
+- Canvas 2D evita requisitos de WebGL de GPUs antiguas; el cielo es un color de
+  cámara, no una textura de miles de píxeles de altura.
+- La simulación mantiene un mundo lógico de 800×600 y escala con FIT. Las 50
+  pistas, constantes y físicas no cambian: alturas y alcance son iguales a la
+  versión original a 800×600. Al rotar se escala la imagen, no se alteran los
+  obstáculos ni la partida. Puede haber bandas libres en pantallas verticales.
+- PWA instalable y arranque sin red tras la primera carga completa. El service
+  worker borra únicamente cachés con prefijo `banana-party-`. Sonido apagado
+  (este juego no utiliza pistas de audio).
+
+Herramientas: `npm install`, `make build`, `make icons`, `make check`, `make test`.
+`CHROME95_PATH=/ruta/a/Chromium make test` ejecuta la misma prueba en ese navegador.
+`make build` genera el script clásico versionado desde `src/`; no requiere
+import maps ni descarga módulos en ejecución. `make test` levanta un servidor
+temporal local y comprueba la interfaz real, retos, pausa, controles y offline.
+La compatibilidad del motor Chromium 95 no sustituye una prueba física de la
+tablet Android 5.0.2 SM-T530NU.
+
+Las secciones históricas siguientes describen la primera versión; ya no se usa CDN
+ni es necesario servir módulos ES6 individuales.
+
 Un videojuego 2D de ascensión vertical diseñado especialmente para niños de 5 años. El objetivo es hacer que un mono salte de plataforma en plataforma hacia arriba, recolectando bananas mientras asciende.
 
 ## 🎮 Características

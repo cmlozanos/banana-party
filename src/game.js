@@ -6,6 +6,7 @@
 import { Player } from './player.js';
 import { UIManager } from './ui.js';
 import { LevelSelectMenu } from './menu.js';
+import { clearControls, showControls } from './controls.js';
 import { 
     PLAYER,
     PLATFORM, 
@@ -166,19 +167,7 @@ class BananaPartyGame extends Phaser.Scene {
         const { width, height } = this.cameras.main;
         const worldHeight = height * WORLD.HEIGHT_MULTIPLIER;
         
-        // Actualizar fondo
-        if (this.background) {
-            this.background.destroy();
-        }
-        const bgGraphics = this.add.graphics();
-        bgGraphics.fillStyle(levelColors.sky, 1);
-        bgGraphics.fillRect(0, 0, width, worldHeight);
-        bgGraphics.generateTexture(ASSETS.TEXTURE_FONDO_CIELO, width, worldHeight);
-        bgGraphics.destroy();
-        
-        this.background = this.add.tileSprite(0, 0, width, worldHeight, ASSETS.TEXTURE_FONDO_CIELO);
-        this.background.setOrigin(0, 0);
-        this.background.setScrollFactor(CAMERA.BACKGROUND_SCROLL_FACTOR, CAMERA.BACKGROUND_SCROLL_FACTOR);
+        this.cameras.main.setBackgroundColor(levelColors.sky);
         
         // Regenerar suelo con nuevos colores
         const groundY = worldHeight - WORLD.GROUND_Y_OFFSET;
@@ -249,7 +238,7 @@ class BananaPartyGame extends Phaser.Scene {
         }
         
         // Crear botón para volver al menú
-        this.menuButton = this.add.text(20, 20, '← Menú', {
+        this.menuButton = this.add.text(this.cameras.main.width - 90, 90, '▦', {
             fontSize: '24px',
             fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
             fill: '#FFFFFF',
@@ -267,6 +256,8 @@ class BananaPartyGame extends Phaser.Scene {
     }
 
     create() {
+        showControls(true);
+        this.events.once('shutdown', () => showControls(false));
         this.createSprites();
         
         const { width, height } = this.cameras.main;
@@ -275,15 +266,7 @@ class BananaPartyGame extends Phaser.Scene {
         
         // Crear fondo con color del nivel actual
         const levelColors = LEVELS.LEVEL_COLORS[(this.currentLevel - 1) % LEVELS.LEVEL_COLORS.length];
-        const bgGraphics = this.add.graphics();
-        bgGraphics.fillStyle(levelColors.sky, 1);
-        bgGraphics.fillRect(0, 0, width, worldHeight);
-        bgGraphics.generateTexture(ASSETS.TEXTURE_FONDO_CIELO, width, worldHeight);
-        bgGraphics.destroy();
-        
-        this.background = this.add.tileSprite(0, 0, width, worldHeight, ASSETS.TEXTURE_FONDO_CIELO);
-        this.background.setOrigin(0, 0);
-        this.background.setScrollFactor(CAMERA.BACKGROUND_SCROLL_FACTOR, CAMERA.BACKGROUND_SCROLL_FACTOR);
+        this.cameras.main.setBackgroundColor(levelColors.sky);
         
         const landscapeGraphics = this.add.graphics();
         landscapeGraphics.fillStyle(PLATFORM.GRASS_COLOR, 1);
@@ -739,10 +722,12 @@ class BananaPartyGame extends Phaser.Scene {
 
 // Configuración de Phaser - Pantalla completa
 const config = {
-    type: Phaser.AUTO,
-    width: window.innerWidth,
-    height: window.innerHeight,
+    // Canvas is reliable on old Android GPUs; no effects require WebGL.
+    type: Phaser.CANVAS,
+    width: 800,
+    height: 600,
     parent: 'game-container',
+    audio: { noAudio: true },
     physics: {
         default: 'arcade',
         arcade: {
@@ -752,10 +737,10 @@ const config = {
     },
     scene: [LevelSelectMenu, BananaPartyGame], // Menú primero, luego el juego
     scale: {
-        mode: GAME.SCALE_MODE,
+        mode: Phaser.Scale.FIT,
         autoCenter: GAME.SCALE_AUTO_CENTER,
-        width: GAME.SCALE_WIDTH,
-        height: GAME.SCALE_HEIGHT
+        width: 800,
+        height: 600
     },
     render: {
         antialias: false, // Desactivar antialiasing para evitar desenfoque
@@ -765,4 +750,26 @@ const config = {
 };
 
 // Inicializar juego
-const game = new Phaser.Game(config);
+if (!window.LearningGate || !window.Phaser) {
+    document.getElementById('load-error').hidden = false;
+} else {
+    let previouslyPaused = false;
+    const game = new Phaser.Game(config);
+    function resetInput() {
+        clearControls();
+        game.scene.scenes.forEach(scene => {
+            if (scene.input && scene.input.keyboard) scene.input.keyboard.resetKeys();
+        });
+        if (game.input) game.input.pointers.forEach(pointer => pointer.reset());
+    }
+    const gate = LearningGate.mount({
+        gameId: 'banana-party',
+        onLock() { previouslyPaused = game.isPaused; game.pause(); resetInput(); },
+        onUnlock() { resetInput(); if (!previouslyPaused) game.resume(); }
+    });
+    // Gate checks also run before scene updates, including returning from sleep.
+    game.events.on('prestep', () => gate.check());
+    game.events.once('ready', () => { if (gate.isLocked()) game.pause(); });
+    window.addEventListener('blur', resetInput);
+    document.addEventListener('visibilitychange', resetInput);
+}

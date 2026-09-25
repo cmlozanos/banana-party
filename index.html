@@ -4,18 +4,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Banana Party - Juego para Niños</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <meta name="theme-color" content="#87ceeb">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" href="icon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="style.css?v=20260925-1">
 </head>
 <body>
     <div id="game-container"></div>
     
-    <!-- Phaser 3 desde CDN -->
-    <script src="https://cdn.jsdelivr.net/npm/phaser@3.70.0/dist/phaser.min.js"></script>
+    <a id="home-link" href="https://cmlozanos.github.io/games/" aria-label="Volver a todos los juegos">⌂</a>
+    <div id="touch-controls" hidden aria-label="Controles del juego">
+      <button data-control="left" aria-label="Mover a la izquierda">◀</button>
+      <button data-control="right" aria-label="Mover a la derecha">▶</button>
+      <button data-control="jump" aria-label="Saltar">↑</button>
+    </div>
+    <p id="load-error" role="alert" hidden>No se pudo cargar el juego. Recarga la página.</p>
+    <script src="learning-gate.js?v=20260925-1"></script>
+    <script src="vendor/phaser.min.js?v=3.70.0" onerror="document.getElementById('load-error').hidden=false"></script>
     
     <!-- Código del juego -->
-    <script type="module" src="src/game.js"></script>
+    <script src="game.bundle.js?v=20260925-1" onerror="document.getElementById('load-error').hidden=false"></script>
+    <script src="pwa.js?v=20260925-1"></script>
 </body>
 </html>

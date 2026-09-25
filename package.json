@@ -4,6 +4,8 @@
   "description": "Videojuego 2D de ascensión vertical para niños",
   "main": "index.html",
   "scripts": {
+    "build": "node tools/build.cjs",
+    "test": "node tools/check.cjs",
     "start": "npx http-server -p 8000 -a localhost",
     "dev": "npx http-server -p 8000 -a localhost -o"
   },
@@ -17,6 +19,7 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "playwright": "1.62.1",
     "http-server": "^14.1.1"
   }
 }

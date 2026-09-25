@@ -3,6 +3,7 @@
  */
 
 import { LEVELS, UI } from './constants.js';
+import { showControls } from './controls.js';
 
 export class LevelSelectMenu extends Phaser.Scene {
     constructor() {
@@ -10,6 +11,7 @@ export class LevelSelectMenu extends Phaser.Scene {
     }
 
     create() {
+        showControls(false);
         const { width, height } = this.cameras.main;
         
         // Fondo con color del nivel 1
@@ -26,7 +28,7 @@ export class LevelSelectMenu extends Phaser.Scene {
         // Calcular número de columnas según el ancho de pantalla
         // Dejar margen de 40px a cada lado, calcular cuántos botones caben
         const availableWidth = width - 80; // Margen de 40px a cada lado
-        const cols = Math.floor(availableWidth / buttonSpacingX);
+        const cols = Math.max(1, Math.floor(availableWidth / buttonSpacingX));
         const rows = Math.ceil(levelCount / cols);
         
         // Calcular altura total del contenido
@@ -39,7 +41,7 @@ export class LevelSelectMenu extends Phaser.Scene {
         
         // Título del juego (con scroll)
         const title = this.add.text(width / 2, height * 0.15, '🍌 Banana Party 🍌', {
-            fontSize: '64px',
+            fontSize: Math.min(52, width / 12) + 'px',
             fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
             fill: '#FFD700',
             stroke: '#000000',
@@ -143,7 +145,8 @@ export class LevelSelectMenu extends Phaser.Scene {
             });
             
             // Click para iniciar nivel
-            buttonZone.on('pointerdown', () => {
+            buttonZone.on('pointerup', pointer => {
+                if (pointer.getDistance() > 12) return;
                 // Guardar el nivel seleccionado en el registro de datos
                 this.registry.set('selectedLevel', levelNumber);
                 
@@ -163,8 +166,13 @@ export class LevelSelectMenu extends Phaser.Scene {
         this.input.on('wheel', (pointer, gameObjects, deltaX, deltaY, deltaZ) => {
             const currentScrollY = this.cameras.main.scrollY;
             const maxScrollY = worldHeight - height;
-            const newScrollY = Phaser.Math.Clamp(currentScrollY - deltaY * 0.5, 0, maxScrollY);
+            const newScrollY = Phaser.Math.Clamp(currentScrollY + deltaY * 0.5, 0, maxScrollY);
             this.cameras.main.setScroll(0, newScrollY);
+        });
+        this.input.on('pointermove', pointer => {
+            if (!pointer.isDown) return;
+            const next = this.cameras.main.scrollY - (pointer.y - pointer.prevPosition.y);
+            this.cameras.main.setScroll(0, Phaser.Math.Clamp(next, 0, worldHeight - height));
         });
     }
 }
