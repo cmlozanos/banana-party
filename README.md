@@ -29,6 +29,13 @@ temporal local y comprueba la interfaz real, retos, pausa, controles y offline.
 La compatibilidad del motor Chromium 95 no sustituye una prueba física de la
 tablet Android 5.0.2 SM-T530NU.
 
+Comprobado el 25/09/2026: `make check` y pruebas de navegador correctos en
+Chromium 151.0.7922.34 y 95.0.4630.0, a 1280×800 y 360×740: entrada bloqueada,
+reto resuelto por su interfaz, movimiento táctil, vencimiento a diez minutos,
+simulación congelada y reanudada, nuevo acceso offline y enlace al portal.
+`npm audit` sin vulnerabilidades. Los 50 presets originales se mantienen y el
+check comprueba sus alturas y alcance vertical con las constantes existentes.
+
 Las secciones históricas siguientes describen la primera versión; ya no se usa CDN
 ni es necesario servir módulos ES6 individuales.
 
