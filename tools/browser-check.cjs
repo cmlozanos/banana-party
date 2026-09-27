@@ -3,6 +3,7 @@ const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
+const { checkTouchUI } = require('./touch-check.cjs');
 const root = path.resolve(__dirname, '..');
 async function solve(page) {
     const prompt = page.locator('#gate-prompt');
@@ -40,6 +41,7 @@ async function solve(page) {
             await page.locator('#learning-gate').waitFor();
             assert(await page.evaluate(() => __capturedGame.isPaused));
             await solve(page);
+            await checkTouchUI(page, '#home-link');
             await page.waitForFunction(() => __capturedGame.scene.isActive('LevelSelectMenu'));
             const scene = await page.evaluate(() => { const g=__capturedGame; const z=g.scene.getScene('LevelSelectMenu').levelButtons[0].zone; return {x:z.x,y:z.y}; });
             const canvasBox=await page.locator('canvas').first().boundingBox();
@@ -49,8 +51,20 @@ async function solve(page) {
             if (process.env.SCREENSHOT_DIR) { fs.mkdirSync(process.env.SCREENSHOT_DIR,{recursive:true}); await page.screenshot({path:path.join(process.env.SCREENSHOT_DIR,'banana-'+viewport.width+'.png')}); }
             const before = await page.evaluate(() => __capturedGame.scene.getScene('BananaPartyGame').player.sprite.x);
             const right=await page.locator('[data-control="right"]').boundingBox();
-            await page.mouse.move(right.x+20,right.y+20); await page.mouse.down(); await page.waitForTimeout(180); await page.mouse.up();
+            const touch = await context.newCDPSession(page);
+            await touch.send('Input.dispatchTouchEvent', {type:'touchStart',touchPoints:[{x:right.x+20,y:right.y+20,id:1}]});
+            await page.waitForTimeout(800);
+            assert(await page.locator('[data-control="right"]').evaluate(node=>node.classList.contains('pressed')));
+            const heldVelocity=await page.evaluate(()=>__capturedGame.scene.getScene('BananaPartyGame').player.sprite.body.velocity.x);
+            await touch.send('Input.dispatchTouchEvent', {type:'touchEnd',touchPoints:[]});
+            assert.equal(await page.locator('[data-control="right"]').evaluate(node=>node.classList.contains('pressed')),false);
+            await touch.detach();
             assert(await page.evaluate(old => __capturedGame.scene.getScene('BananaPartyGame').player.sprite.x>old,before));
+            const releasedX=await page.evaluate(()=>__capturedGame.scene.getScene('BananaPartyGame').player.sprite.x);
+            await page.waitForTimeout(160);
+            assert(await page.evaluate(held=>Math.abs(__capturedGame.scene.getScene('BananaPartyGame').player.sprite.body.velocity.x)<Math.abs(held)/2,heldVelocity),'touch release restores existing friction instead of holding movement');
+            await page.keyboard.down('ArrowLeft');await page.waitForTimeout(120);await page.keyboard.up('ArrowLeft');
+            assert(await page.evaluate(old=>__capturedGame.scene.getScene('BananaPartyGame').player.sprite.x<old,releasedX),'keyboard still moves');
             await page.evaluate(() => {window.__testOffset+=600001;});
             await page.locator('#learning-gate').waitFor();
             const locked=await page.evaluate(() => {const s=__capturedGame.scene.getScene('BananaPartyGame').player.sprite;return [s.x,s.y];});

@@ -1,5 +1,5 @@
-var CACHE = 'banana-party-20260925-1';
-var FILES = ['./', './index.html', './style.css?v=20260925-1', './learning-gate.js?v=20260925-1', './vendor/phaser.min.js?v=3.70.0', './game.bundle.js?v=20260925-1', './pwa.js?v=20260925-1', './manifest.webmanifest', './icon.svg', './icons/icon-192.png', './icons/icon-512.png'];
+var CACHE = 'banana-party-20260927-2';
+var FILES = ['./', './index.html', './style.css?v=20260927-2', './learning-gate.js?v=20260925-1', './vendor/phaser.min.js?v=3.70.0', './game.bundle.js?v=20260925-1', './pwa.js?v=20260927-2', './manifest.webmanifest', './icon.svg', './icons/icon-192.png', './icons/icon-512.png'];
 self.addEventListener('install', function (event) {
     event.waitUntil(caches.open(CACHE).then(function (cache) { return cache.addAll(FILES); }).then(function () { return self.skipWaiting(); }));
 });

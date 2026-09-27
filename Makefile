@@ -12,6 +12,7 @@ build:
 check:
 	node tools/check.cjs
 
+# Browser checks include tools/touch-check.cjs and native hold/release input.
 test:
 	node tools/browser-check.cjs
 
