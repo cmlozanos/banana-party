@@ -1,5 +1,10 @@
 # 🍌 Banana Party - Videojuego 2D para Niños
 
+El perfil de la tablet se configura desde Games: permite seleccionar cualquier
+combinación de sumas, restas, trazos y lectura, con al menos un tipo activo.
+El juego respeta esa selección al entrar y cada diez minutos. Sin perfil válido
+mantiene los retos predeterminados; no modifica la preferencia de sonido ni la partida.
+
 ## Compatibilidad y acceso educativo (25 septiembre 2026)
 
 Adaptación aprobada: funciona como sitio estático de GitHub Pages, sin Ubuntu,
