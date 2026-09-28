@@ -7,6 +7,10 @@ process.chdir(path.resolve(__dirname, '..'));
 cp.execFileSync(process.execPath, ['tools/build.cjs', '--check']);
 for (const file of ['game.bundle.js', 'learning-gate.js', 'pwa.js', 'sw.js', 'vendor/phaser.min.js']) new vm.Script(fs.readFileSync(file, 'utf8'), {filename: file});
 const html = fs.readFileSync('index.html','utf8');
+const css = fs.readFileSync('style.css','utf8');
+const controlsRule = css.match(/#touch-controls\s*\{([^}]+)\}/)[1];
+assert(/bottom:\s*64px;/.test(controlsRule), 'Controls need a 64px fallback above system gestures');
+assert(/bottom:\s*calc\(64px \+ env\(safe-area-inset-bottom, 0px\)\);/.test(controlsRule), 'Safe-area inset must add to the 64px margin');
 assert(!html.includes('cdn.jsdelivr.net'));
 assert(html.includes('https://cmlozanos.github.io/games/'));
 assert(html.indexOf('learning-gate.js') < html.indexOf('game.bundle.js'));
@@ -24,5 +28,6 @@ for (const level of models.LEVELS.PRESETS) {
 }
 const sw = {self: {addEventListener() {}}}; vm.runInNewContext(fs.readFileSync('sw.js','utf8'),sw);
 for (const file of sw.FILES) assert(fs.existsSync(file.split('?')[0]), file);
+assert(sw.FILES.includes('./' + html.match(/href="(style\.css\?v=[^"]+)"/)[1]), 'Precache must contain the current stylesheet version');
 assert(sw.CACHE.startsWith('banana-party-'));
 console.log('PASS syntax, generated bundle, local assets, gate bootstrap, bounded background and PWA files');

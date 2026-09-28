@@ -239,3 +239,18 @@ Desarrollado como un videojuego 2D profesional para niños de 5 años, utilizand
 La UI del juego bloquea los menús táctiles, callouts y selección; los campos editables conservan selección y edición. La protección de contexto solo actúa con un evento táctil o durante los dos segundos posteriores, sin cancelar globalmente los gestos.
 
 `make test` incluye `tools/touch-check.cjs`, teclado y una pulsación táctil de 800 ms con liberación. Admite `CHROME95_PATH`. La emulación no sustituye comprobar el menú nativo en una tablet física.
+
+## Separación de los gestos de Android — 20260928-2
+
+Ajuste aprobado el 28/09/2026 para Banana Party: los controles se elevan desde
+12 px hasta 64 px más `safe-area-inset-bottom`, conservando tamaños, posición
+horizontal y funcionamiento. El margen base también se aplica cuando el
+navegador no informa de una zona segura. No se modifican físicas ni retos y
+no se intenta bloquear la navegación del sistema operativo.
+
+`make check` comprueba el margen CSS y que la versión del estilo esté incluida
+en la caché offline. `make test` verifica los tres botones a 1280×800, 800×1280,
+360×740 y 740×360, también tras rotar durante la partida y volver a entrar sin
+conexión. Se mantienen las pruebas de pulsación larga, movimiento, teclado y
+retos. `SCREENSHOT_DIR=/ruta make test` guarda las cuatro capturas.
+La prueba en navegador no sustituye la comprobación física de gestos en Lenovo.

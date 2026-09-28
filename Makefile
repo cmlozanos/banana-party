@@ -25,7 +25,8 @@ build:
 check:
 	node tools/check.cjs
 
-# Browser checks include tools/touch-check.cjs and native hold/release input.
+# Browser checks include 64px bottom clearance, rotation/offline layout and native hold/release input.
+# CHROME95_PATH selects the legacy engine; SCREENSHOT_DIR saves the four viewport screenshots.
 test:
 	node tools/browser-check.cjs
 
