@@ -24,3 +24,22 @@ Las pruebas de ruta acreditan la primera misión/pista, no una campaña completa
 - `make test`: correcto en Chromium 151.0.7922.34.
 - Banana: 1280×800, 800×1280, 360×740 y 740×360; rotación, teclado, tacto, reto recurrente, pausa, Home local y recarga offline. Ruta real de misión 1 → nivel 2, 10 puntos; caída y salto posterior.
 - No ejecutado en Chrome 95 ni tablet física. No se han recorrido todas las misiones ni combinaciones coche/pista. No se declara ausencia de otros fallos.
+
+## Shared-shell final fixes — 2026-11-23
+
+- Shared kit matches the canonical `home/family-v2/` byte for byte: educational
+  expiry closes Adult settings, shell keyboard events stay isolated, cookie
+  fallback remains authoritative after failed storage writes, real keyboard/held
+  pointer activity extends the session without disabling inactivity expiry, and
+  educational overlays use the shared font. Game-scoped cache revision: `-shell2`.
+- Delivery checks: `node --check family-v2/family.js`, `node --check sw.js` and
+  `make check` passed. No gameplay source changed; no build regeneration needed.
+- Reused coordinator evidence in `home/docs/v2/evidence/banana95.txt`: genuine
+  Chromium 95.0.4630.0 native game checks, after native fixes and before these
+  final shell fixes. Final standalone shell regressions: `shell-regressions95.txt`
+  (5/5 Chromium 95) and `shell-regressions.txt` (10/10 modern Chromium/WebKit),
+  in the same evidence directory. These are reused results, not new full-game
+  browser runs against the final combination or physical Android certification.
+  `home/docs/v2/CONTRACT.md` and `MATRIX.md` record the coordinated scope; all
+  `home/` paths here are evidence references only, never runtime dependencies.
+- No tags or GitHub Releases: coordinated separately.
