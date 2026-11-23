@@ -21,7 +21,8 @@ document.querySelectorAll('[data-control]').forEach(button => {
     function release(event) {
         const action = controlPointers.get(event.pointerId);
         controlPointers.delete(event.pointerId);
-        if (action && !Array.from(controlPointers.values()).includes(action)) touchInput[action] = false;
+        // A quick jump tap is queued until the next update, not erased on release.
+        if (action && action !== 'jump' && !Array.from(controlPointers.values()).includes(action)) touchInput[action] = false;
         button.classList.remove('pressed');
     }
     button.addEventListener('pointerup', release);

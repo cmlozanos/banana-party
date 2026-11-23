@@ -147,6 +147,7 @@ export class LevelSelectMenu extends Phaser.Scene {
             // Click para iniciar nivel
             buttonZone.on('pointerup', pointer => {
                 if (pointer.getDistance() > 12) return;
+                FamilyV2.touch();
                 // Guardar el nivel seleccionado en el registro de datos
                 this.registry.set('selectedLevel', levelNumber);
                 

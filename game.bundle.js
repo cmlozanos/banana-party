@@ -221,7 +221,7 @@ const UI = {
     BANANA_TEXT_X: 20, // Offset desde la derecha (se usa con setOrigin)
     BANANA_TEXT_Y: 20,
     BANANA_TEXT_FONT_SIZE: '48px',
-    BANANA_TEXT_FONT_FAMILY: 'Roboto, sans-serif',
+    BANANA_TEXT_FONT_FAMILY: 'Family School, cursive',
     BANANA_TEXT_COLOR: '#FFD700',
     BANANA_TEXT_STROKE: '#000000',
     BANANA_TEXT_STROKE_THICKNESS: 4,
@@ -232,7 +232,7 @@ const UI = {
     HEIGHT_TEXT_X: 20,
     HEIGHT_TEXT_Y: 20,
     HEIGHT_TEXT_FONT_SIZE: '32px',
-    HEIGHT_TEXT_FONT_FAMILY: 'Comic Sans MS, cursive',
+    HEIGHT_TEXT_FONT_FAMILY: 'Family School, cursive',
     HEIGHT_TEXT_COLOR: '#FFFFFF',
     HEIGHT_TEXT_STROKE: '#000000',
     HEIGHT_TEXT_STROKE_THICKNESS: 3,
@@ -240,7 +240,7 @@ const UI = {
     // Instrucciones
     INSTRUCTIONS_Y: 200,
     INSTRUCTIONS_FONT_SIZE: '28px',
-    INSTRUCTIONS_FONT_FAMILY: 'Comic Sans MS, cursive',
+    INSTRUCTIONS_FONT_FAMILY: 'Family School, cursive',
     INSTRUCTIONS_COLOR: '#FFFFFF',
     INSTRUCTIONS_STROKE: '#000000',
     INSTRUCTIONS_STROKE_THICKNESS: 3,
@@ -1422,7 +1422,8 @@ document.querySelectorAll('[data-control]').forEach(button => {
     function release(event) {
         const action = controlPointers.get(event.pointerId);
         controlPointers.delete(event.pointerId);
-        if (action && !Array.from(controlPointers.values()).includes(action)) touchInput[action] = false;
+        // A quick jump tap is queued until the next update, not erased on release.
+        if (action && action !== 'jump' && !Array.from(controlPointers.values()).includes(action)) touchInput[action] = false;
         button.classList.remove('pressed');
     }
     button.addEventListener('pointerup', release);
@@ -1795,6 +1796,7 @@ class LevelSelectMenu extends Phaser.Scene {
             // Click para iniciar nivel
             buttonZone.on('pointerup', pointer => {
                 if (pointer.getDistance() > 12) return;
+                FamilyV2.touch();
                 // Guardar el nivel seleccionado en el registro de datos
                 this.registry.set('selectedLevel', levelNumber);
                 
@@ -1949,6 +1951,7 @@ class BananaPartyGame extends Phaser.Scene {
     }
     
     reachGoal(player, goal) {
+        if (window.FamilyV2) FamilyV2.award('level-' + this.currentLevel, 10);
         // Avanzar al siguiente nivel
         this.currentLevel++;
         
@@ -2052,7 +2055,7 @@ class BananaPartyGame extends Phaser.Scene {
         }
         
         // Crear botón para volver al menú
-        this.menuButton = this.add.text(this.cameras.main.width - 90, 90, '▦', {
+        this.menuButton = this.add.text(this.cameras.main.width - 90, 90, 'Pistas', {
             fontSize: '24px',
             fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
             fill: '#FFFFFF',
@@ -2159,7 +2162,7 @@ class BananaPartyGame extends Phaser.Scene {
         this.cameras.main.setRoundPixels(true);
         
         // Crear estadísticas de debug solo en localhost
-        this.createDebugStats();
+        if (new URLSearchParams(location.search).has('debug')) this.createDebugStats();
     }
     
     createDebugStats() {
@@ -2261,7 +2264,9 @@ class BananaPartyGame extends Phaser.Scene {
 
     // Callback de proceso para collider: solo permite colisión cuando el jugador viene desde arriba
     processPlatformCollision(body1, body2) {
-        // El callback recibe los cuerpos físicos directamente
+        // Phaser collider process callbacks receive GameObjects, not Arcade bodies.
+        body1 = body1 && (body1.body || body1);
+        body2 = body2 && (body2.body || body2);
         // Necesitamos determinar cuál es el cuerpo del jugador
         if (!this.player || !this.player.sprite) {
             return true; // Si el jugador no existe, permitir colisión
@@ -2498,6 +2503,7 @@ class BananaPartyGame extends Phaser.Scene {
         if (banana && banana.active) {
             banana.destroy();
             this.bananasCollected++;
+            FamilyV2.touch();
             this.uiManager.updateBananaCount(this.bananasCollected);
         }
     }
@@ -2568,7 +2574,13 @@ if (!window.LearningGate || !window.Phaser) {
     document.getElementById('load-error').hidden = false;
 } else {
     let previouslyPaused = false;
+    let familyPaused = false;
+    let gatePaused = false;
     const game = new Phaser.Game(config);
+    FamilyV2.fontReady.then(() => {
+        const menu = game.scene.getScene('LevelSelectMenu');
+        if (menu && menu.scene.isActive()) menu.scene.restart();
+    });
     function resetInput() {
         clearControls();
         game.scene.scenes.forEach(scene => {
@@ -2576,14 +2588,26 @@ if (!window.LearningGate || !window.Phaser) {
         });
         if (game.input) game.input.pointers.forEach(pointer => pointer.reset());
     }
+    function syncPause() {
+        const locked = familyPaused || gatePaused;
+        if (locked) {
+            if (!game.isPaused) game.pause();
+            resetInput();
+        } else { resetInput(); if (!previouslyPaused) game.resume(); }
+    }
+    FamilyV2.register({
+        home() { resetInput(); game.scene.start('LevelSelectMenu'); },
+        pause() { if (!familyPaused && !gatePaused) previouslyPaused = game.isPaused; familyPaused = true; syncPause(); },
+        resume() { familyPaused = false; syncPause(); }
+    });
     const gate = LearningGate.mount({
         gameId: 'banana-party',
-        onLock() { previouslyPaused = game.isPaused; game.pause(); resetInput(); },
-        onUnlock() { resetInput(); if (!previouslyPaused) game.resume(); }
+        onLock() { if (!familyPaused && !gatePaused) previouslyPaused = game.isPaused; gatePaused = true; syncPause(); },
+        onUnlock() { gatePaused = false; syncPause(); }
     });
     // Gate checks also run before scene updates, including returning from sleep.
     game.events.on('prestep', () => gate.check());
-    game.events.once('ready', () => { if (gate.isLocked()) game.pause(); });
+    game.events.once('ready', () => { if (gate.isLocked() || familyPaused) game.pause(); });
     window.addEventListener('blur', resetInput);
     document.addEventListener('visibilitychange', resetInput);
 }

@@ -29,7 +29,7 @@ async function checkControlsLayout(page, stage) {
         assert(bottomGap >= 64, label+' bottom clearance must be at least 64px, got '+bottomGap+'px');
         boxes.push(box);
     }
-    boxes.push(await page.locator('#home-link').boundingBox());
+    boxes.push(await page.locator('family-v2-shell #home').boundingBox());
     for (let i=0; i<boxes.length; i++) for (let j=i+1; j<boxes.length; j++) {
         const a=boxes[i], b=boxes[j];
         assert(a.x+a.width <= b.x || b.x+b.width <= a.x || a.y+a.height <= b.y || b.y+b.height <= a.y, label+' controls and home link must not overlap');
@@ -72,10 +72,18 @@ async function solve(page) {
             await page.locator('#learning-gate').waitFor();
             assert(await page.evaluate(() => __capturedGame.isPaused));
             await solve(page);
-            await checkTouchUI(page, '#home-link');
             await startLevel(page);
+            await checkTouchUI(page, '[data-control=left]');
             await page.waitForTimeout(700);
             await checkControlsLayout(page, 'entry');
+            assert.equal(await page.evaluate(() => FamilyV2.read().points), 0, 'starting is not completion');
+            await page.locator('family-v2-shell #adults').click();
+            assert(await page.evaluate(() => __capturedGame.isPaused));
+            const frozen = await page.evaluate(() => { const p=__capturedGame.scene.getScene('BananaPartyGame').player.sprite; return [p.x,p.y]; });
+            await page.waitForTimeout(120);
+            assert.deepEqual(await page.evaluate(() => { const p=__capturedGame.scene.getScene('BananaPartyGame').player.sprite; return [p.x,p.y]; }), frozen);
+            await page.locator('family-v2-shell #close').click();
+            await page.waitForFunction(() => !__capturedGame.isPaused);
             if (process.env.SCREENSHOT_DIR) { fs.mkdirSync(process.env.SCREENSHOT_DIR,{recursive:true}); await page.screenshot({path:path.join(process.env.SCREENSHOT_DIR,'banana-'+viewport.width+'.png')}); }
             const before = await page.evaluate(() => __capturedGame.scene.getScene('BananaPartyGame').player.sprite.x);
             const right=await page.locator('[data-control="right"]').boundingBox();
@@ -98,17 +106,54 @@ async function solve(page) {
             assert(await page.evaluate(() => __capturedGame.scene.isActive('BananaPartyGame')), 'rotation keeps the current game active');
             await page.setViewportSize(viewport);
             await checkControlsLayout(page, 'rotated back');
+            if (viewport.width === 1280) {
+                const route = await page.evaluate(async () => {
+                    const scene=__capturedGame.scene.getScene('BananaPartyGame'), visited=[];
+                    const jump=document.querySelector('[data-control=jump]');
+                    for(let tick=0;tick<2000 && scene.currentLevel===1;tick++) {
+                        const p=scene.player, body=p.sprite.body;
+                        const above=scene.platforms.filter(platform=>platform.body.top<body.bottom-10).sort((a,b)=>b.body.top-a.body.top)[0];
+                        const target=above?above.x:scene.goal.x;
+                        scene.cursors.left.isDown=p.sprite.x>target+8;
+                        scene.cursors.right.isDown=p.sprite.x<target-8;
+                        if(p.isGrounded) {
+                            const h=Math.round(body.bottom);if(visited[visited.length-1]!==h)visited.push(h);
+                            jump.dispatchEvent(new PointerEvent('pointerdown',{pointerId:1,bubbles:true}));
+                            await new Promise(resolve=>setTimeout(resolve,35));
+                            jump.dispatchEvent(new PointerEvent('pointerup',{pointerId:1,bubbles:true}));
+                        }
+                        await new Promise(resolve=>setTimeout(resolve,20));
+                    }
+                    scene.cursors.left.isDown=scene.cursors.right.isDown=false;
+                    return {level:scene.currentLevel,visited,y:scene.player.sprite.y};
+                });
+                console.log('Banana native physics route', JSON.stringify(route));
+                assert.equal(route.level,2,'real platform contacts and jumps must complete the first mission');
+                assert.equal(await page.evaluate(() => FamilyV2.read().points),10,'real goal awards points once');
+                // Walk off naturally and fall to the safe floor, then use a real touch jump again.
+                await page.keyboard.down('ArrowRight');await page.waitForTimeout(1800);await page.keyboard.up('ArrowRight');
+                await page.waitForFunction(() => {
+                    const s=__capturedGame.scene.getScene('BananaPartyGame');
+                    return s.player.isGrounded && s.player.sprite.y>5800;
+                });
+                const floorY=await page.evaluate(() => __capturedGame.scene.getScene('BananaPartyGame').player.sprite.y);
+                await page.locator('[data-control=jump]').tap();await page.waitForTimeout(150);
+                assert(await page.evaluate(y => __capturedGame.scene.getScene('BananaPartyGame').player.sprite.y<y-30,floorY),'falling does not leave the player stuck');
+            }
             await page.evaluate(() => {window.__testOffset+=600001;});
             await page.locator('#learning-gate').waitFor();
             const locked=await page.evaluate(() => {const s=__capturedGame.scene.getScene('BananaPartyGame').player.sprite;return [s.x,s.y];});
             await page.waitForTimeout(250);
             assert.deepEqual(await page.evaluate(() => {const s=__capturedGame.scene.getScene('BananaPartyGame').player.sprite;return [s.x,s.y];}),locked);
             await solve(page);
-            assert(!await page.evaluate(() => __capturedGame.isPaused));
+            await page.waitForFunction(() => !__capturedGame.isPaused);
             await page.evaluate(async () => {await navigator.serviceWorker.ready;});
             await page.waitForFunction(() => !!navigator.serviceWorker.controller);
             await context.setOffline(true); await page.reload(); await page.locator('#learning-gate').waitFor(); await solve(page);
-            assert.equal(await page.locator('#home-link').getAttribute('href'),'https://cmlozanos.github.io/games/');
+            const ownUrl = page.url();
+            await page.locator('family-v2-shell #home').click();
+            await page.waitForFunction(() => __capturedGame.scene.isActive('LevelSelectMenu'));
+            assert.equal(page.url(), ownUrl, 'Home stays in this game');
             await startLevel(page);
             await checkControlsLayout(page, 'offline reload');
             assert.deepEqual(errors,[]);

@@ -11,13 +11,16 @@ check-gates:
 
 check: check-gates
 
-.PHONY: run help build check test icons
+.PHONY: run help install build check test icons
 
 PORT ?= 8000
 HOST ?= localhost
 
 help:
 	@echo "🍌 Banana Party - make run"
+
+install:
+	npm ci
 
 build:
 	node tools/build.cjs

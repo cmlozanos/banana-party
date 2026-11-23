@@ -217,7 +217,7 @@ export const UI = {
     BANANA_TEXT_X: 20, // Offset desde la derecha (se usa con setOrigin)
     BANANA_TEXT_Y: 20,
     BANANA_TEXT_FONT_SIZE: '48px',
-    BANANA_TEXT_FONT_FAMILY: 'Roboto, sans-serif',
+    BANANA_TEXT_FONT_FAMILY: 'Family School, cursive',
     BANANA_TEXT_COLOR: '#FFD700',
     BANANA_TEXT_STROKE: '#000000',
     BANANA_TEXT_STROKE_THICKNESS: 4,
@@ -228,7 +228,7 @@ export const UI = {
     HEIGHT_TEXT_X: 20,
     HEIGHT_TEXT_Y: 20,
     HEIGHT_TEXT_FONT_SIZE: '32px',
-    HEIGHT_TEXT_FONT_FAMILY: 'Comic Sans MS, cursive',
+    HEIGHT_TEXT_FONT_FAMILY: 'Family School, cursive',
     HEIGHT_TEXT_COLOR: '#FFFFFF',
     HEIGHT_TEXT_STROKE: '#000000',
     HEIGHT_TEXT_STROKE_THICKNESS: 3,
@@ -236,7 +236,7 @@ export const UI = {
     // Instrucciones
     INSTRUCTIONS_Y: 200,
     INSTRUCTIONS_FONT_SIZE: '28px',
-    INSTRUCTIONS_FONT_FAMILY: 'Comic Sans MS, cursive',
+    INSTRUCTIONS_FONT_FAMILY: 'Family School, cursive',
     INSTRUCTIONS_COLOR: '#FFFFFF',
     INSTRUCTIONS_STROKE: '#000000',
     INSTRUCTIONS_STROKE_THICKNESS: 3,

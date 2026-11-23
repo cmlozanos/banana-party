@@ -135,6 +135,7 @@ class BananaPartyGame extends Phaser.Scene {
     }
     
     reachGoal(player, goal) {
+        if (window.FamilyV2) FamilyV2.award('level-' + this.currentLevel, 10);
         // Avanzar al siguiente nivel
         this.currentLevel++;
         
@@ -238,7 +239,7 @@ class BananaPartyGame extends Phaser.Scene {
         }
         
         // Crear botón para volver al menú
-        this.menuButton = this.add.text(this.cameras.main.width - 90, 90, '▦', {
+        this.menuButton = this.add.text(this.cameras.main.width - 90, 90, 'Pistas', {
             fontSize: '24px',
             fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
             fill: '#FFFFFF',
@@ -345,7 +346,7 @@ class BananaPartyGame extends Phaser.Scene {
         this.cameras.main.setRoundPixels(true);
         
         // Crear estadísticas de debug solo en localhost
-        this.createDebugStats();
+        if (new URLSearchParams(location.search).has('debug')) this.createDebugStats();
     }
     
     createDebugStats() {
@@ -447,7 +448,9 @@ class BananaPartyGame extends Phaser.Scene {
 
     // Callback de proceso para collider: solo permite colisión cuando el jugador viene desde arriba
     processPlatformCollision(body1, body2) {
-        // El callback recibe los cuerpos físicos directamente
+        // Phaser collider process callbacks receive GameObjects, not Arcade bodies.
+        body1 = body1 && (body1.body || body1);
+        body2 = body2 && (body2.body || body2);
         // Necesitamos determinar cuál es el cuerpo del jugador
         if (!this.player || !this.player.sprite) {
             return true; // Si el jugador no existe, permitir colisión
@@ -684,6 +687,7 @@ class BananaPartyGame extends Phaser.Scene {
         if (banana && banana.active) {
             banana.destroy();
             this.bananasCollected++;
+            FamilyV2.touch();
             this.uiManager.updateBananaCount(this.bananasCollected);
         }
     }
@@ -754,7 +758,13 @@ if (!window.LearningGate || !window.Phaser) {
     document.getElementById('load-error').hidden = false;
 } else {
     let previouslyPaused = false;
+    let familyPaused = false;
+    let gatePaused = false;
     const game = new Phaser.Game(config);
+    FamilyV2.fontReady.then(() => {
+        const menu = game.scene.getScene('LevelSelectMenu');
+        if (menu && menu.scene.isActive()) menu.scene.restart();
+    });
     function resetInput() {
         clearControls();
         game.scene.scenes.forEach(scene => {
@@ -762,14 +772,26 @@ if (!window.LearningGate || !window.Phaser) {
         });
         if (game.input) game.input.pointers.forEach(pointer => pointer.reset());
     }
+    function syncPause() {
+        const locked = familyPaused || gatePaused;
+        if (locked) {
+            if (!game.isPaused) game.pause();
+            resetInput();
+        } else { resetInput(); if (!previouslyPaused) game.resume(); }
+    }
+    FamilyV2.register({
+        home() { resetInput(); game.scene.start('LevelSelectMenu'); },
+        pause() { if (!familyPaused && !gatePaused) previouslyPaused = game.isPaused; familyPaused = true; syncPause(); },
+        resume() { familyPaused = false; syncPause(); }
+    });
     const gate = LearningGate.mount({
         gameId: 'banana-party',
-        onLock() { previouslyPaused = game.isPaused; game.pause(); resetInput(); },
-        onUnlock() { resetInput(); if (!previouslyPaused) game.resume(); }
+        onLock() { if (!familyPaused && !gatePaused) previouslyPaused = game.isPaused; gatePaused = true; syncPause(); },
+        onUnlock() { gatePaused = false; syncPause(); }
     });
     // Gate checks also run before scene updates, including returning from sleep.
     game.events.on('prestep', () => gate.check());
-    game.events.once('ready', () => { if (gate.isLocked()) game.pause(); });
+    game.events.once('ready', () => { if (gate.isLocked() || familyPaused) game.pause(); });
     window.addEventListener('blur', resetInput);
     document.addEventListener('visibilitychange', resetInput);
 }

@@ -85,3 +85,10 @@ canvas { display: block; touch-action: none; }
         transform: scale(1.2);
     }
 }
+
+/* The family bar sits outside the logical 800×600 playfield. */
+.family-toolbar { position:fixed; top:8px; right:8px; z-index:5; }
+html.family-v2 body { background:var(--family-page); color:var(--family-ink); }
+html.family-v2 #game-container { height:calc(var(--family-height,100vh) - 64px); margin-top:64px; }
+html.family-v2 #touch-controls button { border:0; }
+html.family-v2 #touch-controls button:focus-visible { outline:3px solid #b08025; outline-offset:3px; }
