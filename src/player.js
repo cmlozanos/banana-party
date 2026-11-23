@@ -14,16 +14,36 @@ export class Player {
             graphics.fillStyle(PLAYER.COLOR, 1);
             graphics.lineStyle(PLAYER.BORDER_WIDTH, PLAYER.BORDER_COLOR, 1);
             
-            // Triángulo apuntando hacia arriba
-            const centerX = PLAYER.WIDTH / 2;
-            graphics.beginPath();
-            graphics.moveTo(centerX, 0);
-            graphics.lineTo(PLAYER.WIDTH, PLAYER.HEIGHT);
-            graphics.lineTo(0, PLAYER.HEIGHT);
-            graphics.closePath();
-            graphics.fillPath();
-            graphics.strokePath();
-            
+            // Original monkey artwork, kept inside the unchanged 80 × 100 physics envelope.
+            graphics.fillStyle(0x593522, 1);
+            graphics.fillEllipse(40, 69, 57, 56);
+            graphics.fillCircle(12, 31, 12);
+            graphics.fillCircle(68, 31, 12);
+            graphics.fillStyle(0xc88752, 1);
+            graphics.fillCircle(12, 31, 7);
+            graphics.fillCircle(68, 31, 7);
+            graphics.fillStyle(0x865233, 1);
+            graphics.fillEllipse(40, 32, 60, 57);
+            graphics.fillStyle(0xf1c595, 1);
+            graphics.fillEllipse(40, 75, 31, 34);
+            graphics.fillEllipse(28, 33, 25, 31);
+            graphics.fillEllipse(52, 33, 25, 31);
+            graphics.fillEllipse(40, 48, 35, 21);
+            graphics.fillStyle(0x251e20, 1);
+            graphics.fillCircle(29, 30, 4);
+            graphics.fillCircle(51, 30, 4);
+            graphics.fillEllipse(40, 43, 9, 6);
+            graphics.lineStyle(2, 0x593522, 1);
+            graphics.beginPath(); graphics.moveTo(30, 49);
+            graphics.lineTo(40, 53); graphics.lineTo(50, 49); graphics.strokePath();
+            graphics.fillStyle(0xffffff, 1);
+            graphics.fillCircle(30, 29, 1.5); graphics.fillCircle(52, 29, 1.5);
+            graphics.fillStyle(0x593522, 1);
+            graphics.fillRoundedRect(4, 59, 14, 32, 7);
+            graphics.fillRoundedRect(62, 59, 14, 32, 7);
+            graphics.fillEllipse(25, 94, 25, 12);
+            graphics.fillEllipse(55, 94, 25, 12);
+
             graphics.generateTexture(PLAYER.TEXTURE_MONO_CUADRADO, PLAYER.WIDTH, PLAYER.HEIGHT);
             graphics.destroy();
         }

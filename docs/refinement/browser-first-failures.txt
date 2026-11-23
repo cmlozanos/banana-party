@@ -1,0 +1,8 @@
+AssertionError [ERR_ASSERTION]: keyboard still moves
+    at /Users/carlos.lozanosoto/personal/repositories/banana-party/tools/browser-check.cjs:103:13 {
+  generatedMessage: false,
+  code: 'ERR_ASSERTION',
+  actual: false,
+  expected: true,
+  operator: '=='
+}

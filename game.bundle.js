@@ -1448,16 +1448,36 @@ class Player {
             graphics.fillStyle(PLAYER.COLOR, 1);
             graphics.lineStyle(PLAYER.BORDER_WIDTH, PLAYER.BORDER_COLOR, 1);
             
-            // Triángulo apuntando hacia arriba
-            const centerX = PLAYER.WIDTH / 2;
-            graphics.beginPath();
-            graphics.moveTo(centerX, 0);
-            graphics.lineTo(PLAYER.WIDTH, PLAYER.HEIGHT);
-            graphics.lineTo(0, PLAYER.HEIGHT);
-            graphics.closePath();
-            graphics.fillPath();
-            graphics.strokePath();
-            
+            // Original monkey artwork, kept inside the unchanged 80 × 100 physics envelope.
+            graphics.fillStyle(0x593522, 1);
+            graphics.fillEllipse(40, 69, 57, 56);
+            graphics.fillCircle(12, 31, 12);
+            graphics.fillCircle(68, 31, 12);
+            graphics.fillStyle(0xc88752, 1);
+            graphics.fillCircle(12, 31, 7);
+            graphics.fillCircle(68, 31, 7);
+            graphics.fillStyle(0x865233, 1);
+            graphics.fillEllipse(40, 32, 60, 57);
+            graphics.fillStyle(0xf1c595, 1);
+            graphics.fillEllipse(40, 75, 31, 34);
+            graphics.fillEllipse(28, 33, 25, 31);
+            graphics.fillEllipse(52, 33, 25, 31);
+            graphics.fillEllipse(40, 48, 35, 21);
+            graphics.fillStyle(0x251e20, 1);
+            graphics.fillCircle(29, 30, 4);
+            graphics.fillCircle(51, 30, 4);
+            graphics.fillEllipse(40, 43, 9, 6);
+            graphics.lineStyle(2, 0x593522, 1);
+            graphics.beginPath(); graphics.moveTo(30, 49);
+            graphics.lineTo(40, 53); graphics.lineTo(50, 49); graphics.strokePath();
+            graphics.fillStyle(0xffffff, 1);
+            graphics.fillCircle(30, 29, 1.5); graphics.fillCircle(52, 29, 1.5);
+            graphics.fillStyle(0x593522, 1);
+            graphics.fillRoundedRect(4, 59, 14, 32, 7);
+            graphics.fillRoundedRect(62, 59, 14, 32, 7);
+            graphics.fillEllipse(25, 94, 25, 12);
+            graphics.fillEllipse(55, 94, 25, 12);
+
             graphics.generateTexture(PLAYER.TEXTURE_MONO_CUADRADO, PLAYER.WIDTH, PLAYER.HEIGHT);
             graphics.destroy();
         }
@@ -1599,7 +1619,7 @@ class UIManager {
         // Contador de bananas - grande y visible
         this.bananaText = this.scene.add.text(width - UI.BANANA_TEXT_X, UI.BANANA_TEXT_Y, '🍌 0', {
             fontSize: UI.BANANA_TEXT_FONT_SIZE,
-            fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
+            fontFamily: window.FamilyV2.fontFamily,
             fill: UI.BANANA_TEXT_COLOR,
             stroke: UI.BANANA_TEXT_STROKE,
             strokeThickness: UI.BANANA_TEXT_STROKE_THICKNESS,
@@ -1612,7 +1632,7 @@ class UIManager {
         // Indicador de altura/progreso
         this.heightText = this.scene.add.text(UI.HEIGHT_TEXT_X, UI.HEIGHT_TEXT_Y, 'Altura: 0m', {
             fontSize: UI.HEIGHT_TEXT_FONT_SIZE,
-            fontFamily: UI.HEIGHT_TEXT_FONT_FAMILY,
+            fontFamily: window.FamilyV2.fontFamily,
             fill: UI.HEIGHT_TEXT_COLOR,
             stroke: UI.HEIGHT_TEXT_STROKE,
             strokeThickness: UI.HEIGHT_TEXT_STROKE_THICKNESS
@@ -1623,7 +1643,7 @@ class UIManager {
         // Indicador de nivel
         this.levelText = this.scene.add.text(UI.HEIGHT_TEXT_X, UI.HEIGHT_TEXT_Y + 50, 'Nivel: 1', {
             fontSize: UI.HEIGHT_TEXT_FONT_SIZE,
-            fontFamily: UI.HEIGHT_TEXT_FONT_FAMILY,
+            fontFamily: window.FamilyV2.fontFamily,
             fill: UI.HEIGHT_TEXT_COLOR,
             stroke: UI.HEIGHT_TEXT_STROKE,
             strokeThickness: UI.HEIGHT_TEXT_STROKE_THICKNESS
@@ -1691,7 +1711,7 @@ class LevelSelectMenu extends Phaser.Scene {
         // Título del juego (con scroll)
         const title = this.add.text(width / 2, height * 0.15, '🍌 Banana Party 🍌', {
             fontSize: Math.min(52, width / 12) + 'px',
-            fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
+            fontFamily: window.FamilyV2.fontFamily,
             fill: '#FFD700',
             stroke: '#000000',
             strokeThickness: 6,
@@ -1738,7 +1758,7 @@ class LevelSelectMenu extends Phaser.Scene {
             // Texto del botón
             const buttonText = this.add.text(x, y, `Nivel ${levelNumber}`, {
                 fontSize: '28px',
-                fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
+                fontFamily: window.FamilyV2.fontFamily,
                 fill: '#FFFFFF',
                 stroke: '#000000',
                 strokeThickness: 3,
@@ -1881,11 +1901,55 @@ class BananaPartyGame extends Phaser.Scene {
             platformGraphics.fillStyle(levelColors.grass, 1);
             platformGraphics.fillRect(0, 0, width, grassHeight);
             
+            // Strata, pebbles and lit grass retain the exact collision rectangle.
+            platformGraphics.fillStyle(0x382c26, 0.25);
+            platformGraphics.fillRect(0, totalHeight-8, width, 8);
+            platformGraphics.fillStyle(0xe3bd80, 0.65);
+            for (let x=9; x<width; x+=21) platformGraphics.fillEllipse(x, grassHeight+12+(x%7), 9, 4);
+            platformGraphics.fillStyle(0xe4f0a0, 0.65);
+            platformGraphics.fillRect(0, 0, width, 3);
+            platformGraphics.fillStyle(0x285b32, 0.6);
+            for (let x=5; x<width; x+=13) platformGraphics.fillTriangle(x, 6, x+5, 15, x+8, 6);
+
             platformGraphics.generateTexture(`${PLATFORM.TEXTURE_PLATFORM_PREFIX}${i + 1}`, width, totalHeight);
             platformGraphics.destroy();
         }
     }
     
+    createScenery() {
+        this.scenery = this.add.graphics().setScrollFactor(0).setDepth(-10);
+        const redraw = () => {
+            const dark = (window.FamilyV2?.theme?.() ?? (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark';
+            const g = this.scenery;
+            g.clear();
+            // Banded atmospheric layers are geometry, not a world-height bitmap.
+            for (let i = 0; i < 60; i++) {
+                g.fillStyle(dark ? Phaser.Display.Color.GetColor(15+i/5, 29+i*.4, 53+i*.6) : Phaser.Display.Color.GetColor(105+i*1.6, 185+i*.8, 211+i*.4), 1);
+                g.fillRect(0, i*10, 800, 11);
+            }
+            g.fillStyle(dark ? 0xe5efff : 0xffefb5, 1);
+            g.fillCircle(649, 105, dark ? 28 : 39);
+            if (dark) {
+                g.fillStyle(0xdcecff, 0.85);
+                for (let i=0;i<35;i++) g.fillCircle((i*137)%800, 28+(i*43)%260, i%3 ? 1 : 2);
+            }
+            for (let layer=0;layer<3;layer++) {
+                g.fillStyle(dark ? [0x263f58,0x214b50,0x173c3d][layer] : [0x8cbabd,0x579b85,0x31755c][layer], 1);
+                for (let i=0;i<7;i++) g.fillEllipse(i*145-30, 465+layer*85, 260, 390-layer*35);
+            }
+            for (let i=0;i<8;i++) {
+                const x=i%2 ? 772 : 24, y=65+i*76;
+                g.lineStyle(5, dark ? 0x375b4d : 0x52794b, 1);
+                g.lineBetween(x, y-65, x+10, y+65);
+                g.fillStyle(dark ? 0x295e4c : 0x38815a, 1);
+                g.fillEllipse(x+20,y,52,19); g.fillEllipse(x-15,y+24,48,18);
+            }
+        };
+        redraw();
+        window.addEventListener('familyv2:appearance', redraw);
+        this.events.once('shutdown', () => window.removeEventListener('familyv2:appearance', redraw));
+    }
+
     createGoal() {
         const { width } = this.cameras.main;
         const worldHeight = this.cameras.main.height * WORLD.HEIGHT_MULTIPLIER;
@@ -2057,7 +2121,7 @@ class BananaPartyGame extends Phaser.Scene {
         // Crear botón para volver al menú
         this.menuButton = this.add.text(this.cameras.main.width - 90, 90, 'Pistas', {
             fontSize: '24px',
-            fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
+            fontFamily: window.FamilyV2.fontFamily,
             fill: '#FFFFFF',
             stroke: '#000000',
             strokeThickness: 3,
@@ -2076,6 +2140,7 @@ class BananaPartyGame extends Phaser.Scene {
         showControls(true);
         this.events.once('shutdown', () => showControls(false));
         this.createSprites();
+        this.createScenery();
         
         const { width, height } = this.cameras.main;
         const worldHeight = height * WORLD.HEIGHT_MULTIPLIER;
@@ -2179,7 +2244,7 @@ class BananaPartyGame extends Phaser.Scene {
         // Colocarlo en Y=120 para que esté debajo del nivel (Y=70) con un poco de espacio
         this.debugText = this.add.text(20, 120, '', {
             fontSize: '16px',
-            fontFamily: 'monospace',
+            fontFamily: window.FamilyV2.fontFamily,
             fill: '#FFFFFF',
             stroke: '#000000',
             strokeThickness: 2,
@@ -2573,6 +2638,7 @@ const config = {
 if (!window.LearningGate || !window.Phaser) {
     document.getElementById('load-error').hidden = false;
 } else {
+    FamilyV2.fontReady.then(() => {
     let previouslyPaused = false;
     let familyPaused = false;
     let gatePaused = false;
@@ -2610,6 +2676,7 @@ if (!window.LearningGate || !window.Phaser) {
     game.events.once('ready', () => { if (gate.isLocked() || familyPaused) game.pause(); });
     window.addEventListener('blur', resetInput);
     document.addEventListener('visibilitychange', resetInput);
+    });
 }
 
 })();

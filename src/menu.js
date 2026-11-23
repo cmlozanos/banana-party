@@ -42,7 +42,7 @@ export class LevelSelectMenu extends Phaser.Scene {
         // Título del juego (con scroll)
         const title = this.add.text(width / 2, height * 0.15, '🍌 Banana Party 🍌', {
             fontSize: Math.min(52, width / 12) + 'px',
-            fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
+            fontFamily: window.FamilyV2.fontFamily,
             fill: '#FFD700',
             stroke: '#000000',
             strokeThickness: 6,
@@ -89,7 +89,7 @@ export class LevelSelectMenu extends Phaser.Scene {
             // Texto del botón
             const buttonText = this.add.text(x, y, `Nivel ${levelNumber}`, {
                 fontSize: '28px',
-                fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
+                fontFamily: window.FamilyV2.fontFamily,
                 fill: '#FFFFFF',
                 stroke: '#000000',
                 strokeThickness: 3,

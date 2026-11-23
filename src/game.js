@@ -65,11 +65,55 @@ class BananaPartyGame extends Phaser.Scene {
             platformGraphics.fillStyle(levelColors.grass, 1);
             platformGraphics.fillRect(0, 0, width, grassHeight);
             
+            // Strata, pebbles and lit grass retain the exact collision rectangle.
+            platformGraphics.fillStyle(0x382c26, 0.25);
+            platformGraphics.fillRect(0, totalHeight-8, width, 8);
+            platformGraphics.fillStyle(0xe3bd80, 0.65);
+            for (let x=9; x<width; x+=21) platformGraphics.fillEllipse(x, grassHeight+12+(x%7), 9, 4);
+            platformGraphics.fillStyle(0xe4f0a0, 0.65);
+            platformGraphics.fillRect(0, 0, width, 3);
+            platformGraphics.fillStyle(0x285b32, 0.6);
+            for (let x=5; x<width; x+=13) platformGraphics.fillTriangle(x, 6, x+5, 15, x+8, 6);
+
             platformGraphics.generateTexture(`${PLATFORM.TEXTURE_PLATFORM_PREFIX}${i + 1}`, width, totalHeight);
             platformGraphics.destroy();
         }
     }
     
+    createScenery() {
+        this.scenery = this.add.graphics().setScrollFactor(0).setDepth(-10);
+        const redraw = () => {
+            const dark = (window.FamilyV2?.theme?.() ?? (window.matchMedia?.('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')) === 'dark';
+            const g = this.scenery;
+            g.clear();
+            // Banded atmospheric layers are geometry, not a world-height bitmap.
+            for (let i = 0; i < 60; i++) {
+                g.fillStyle(dark ? Phaser.Display.Color.GetColor(15+i/5, 29+i*.4, 53+i*.6) : Phaser.Display.Color.GetColor(105+i*1.6, 185+i*.8, 211+i*.4), 1);
+                g.fillRect(0, i*10, 800, 11);
+            }
+            g.fillStyle(dark ? 0xe5efff : 0xffefb5, 1);
+            g.fillCircle(649, 105, dark ? 28 : 39);
+            if (dark) {
+                g.fillStyle(0xdcecff, 0.85);
+                for (let i=0;i<35;i++) g.fillCircle((i*137)%800, 28+(i*43)%260, i%3 ? 1 : 2);
+            }
+            for (let layer=0;layer<3;layer++) {
+                g.fillStyle(dark ? [0x263f58,0x214b50,0x173c3d][layer] : [0x8cbabd,0x579b85,0x31755c][layer], 1);
+                for (let i=0;i<7;i++) g.fillEllipse(i*145-30, 465+layer*85, 260, 390-layer*35);
+            }
+            for (let i=0;i<8;i++) {
+                const x=i%2 ? 772 : 24, y=65+i*76;
+                g.lineStyle(5, dark ? 0x375b4d : 0x52794b, 1);
+                g.lineBetween(x, y-65, x+10, y+65);
+                g.fillStyle(dark ? 0x295e4c : 0x38815a, 1);
+                g.fillEllipse(x+20,y,52,19); g.fillEllipse(x-15,y+24,48,18);
+            }
+        };
+        redraw();
+        window.addEventListener('familyv2:appearance', redraw);
+        this.events.once('shutdown', () => window.removeEventListener('familyv2:appearance', redraw));
+    }
+
     createGoal() {
         const { width } = this.cameras.main;
         const worldHeight = this.cameras.main.height * WORLD.HEIGHT_MULTIPLIER;
@@ -241,7 +285,7 @@ class BananaPartyGame extends Phaser.Scene {
         // Crear botón para volver al menú
         this.menuButton = this.add.text(this.cameras.main.width - 90, 90, 'Pistas', {
             fontSize: '24px',
-            fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
+            fontFamily: window.FamilyV2.fontFamily,
             fill: '#FFFFFF',
             stroke: '#000000',
             strokeThickness: 3,
@@ -260,6 +304,7 @@ class BananaPartyGame extends Phaser.Scene {
         showControls(true);
         this.events.once('shutdown', () => showControls(false));
         this.createSprites();
+        this.createScenery();
         
         const { width, height } = this.cameras.main;
         const worldHeight = height * WORLD.HEIGHT_MULTIPLIER;
@@ -363,7 +408,7 @@ class BananaPartyGame extends Phaser.Scene {
         // Colocarlo en Y=120 para que esté debajo del nivel (Y=70) con un poco de espacio
         this.debugText = this.add.text(20, 120, '', {
             fontSize: '16px',
-            fontFamily: 'monospace',
+            fontFamily: window.FamilyV2.fontFamily,
             fill: '#FFFFFF',
             stroke: '#000000',
             strokeThickness: 2,
@@ -757,6 +802,7 @@ const config = {
 if (!window.LearningGate || !window.Phaser) {
     document.getElementById('load-error').hidden = false;
 } else {
+    FamilyV2.fontReady.then(() => {
     let previouslyPaused = false;
     let familyPaused = false;
     let gatePaused = false;
@@ -794,4 +840,5 @@ if (!window.LearningGate || !window.Phaser) {
     game.events.once('ready', () => { if (gate.isLocked() || familyPaused) game.pause(); });
     window.addEventListener('blur', resetInput);
     document.addEventListener('visibilitychange', resetInput);
+    });
 }

@@ -1,0 +1,7 @@
+node tools/sync-learning-gate.mjs --check
+.: verified profile, gate, 100 words/images and local offline loading (935825 image bytes)
+node tools/check.cjs
+PASS syntax, generated bundle, local assets, gate bootstrap, bounded background and PWA files
+PASS V2 classic kit, slug and all four exact offline assets
+PASS one-way platform callback with actual Phaser argument shape
+PASS quick jump tap queue and pause input reset

@@ -16,7 +16,7 @@ export class UIManager {
         // Contador de bananas - grande y visible
         this.bananaText = this.scene.add.text(width - UI.BANANA_TEXT_X, UI.BANANA_TEXT_Y, '🍌 0', {
             fontSize: UI.BANANA_TEXT_FONT_SIZE,
-            fontFamily: UI.BANANA_TEXT_FONT_FAMILY,
+            fontFamily: window.FamilyV2.fontFamily,
             fill: UI.BANANA_TEXT_COLOR,
             stroke: UI.BANANA_TEXT_STROKE,
             strokeThickness: UI.BANANA_TEXT_STROKE_THICKNESS,
@@ -29,7 +29,7 @@ export class UIManager {
         // Indicador de altura/progreso
         this.heightText = this.scene.add.text(UI.HEIGHT_TEXT_X, UI.HEIGHT_TEXT_Y, 'Altura: 0m', {
             fontSize: UI.HEIGHT_TEXT_FONT_SIZE,
-            fontFamily: UI.HEIGHT_TEXT_FONT_FAMILY,
+            fontFamily: window.FamilyV2.fontFamily,
             fill: UI.HEIGHT_TEXT_COLOR,
             stroke: UI.HEIGHT_TEXT_STROKE,
             strokeThickness: UI.HEIGHT_TEXT_STROKE_THICKNESS
@@ -40,7 +40,7 @@ export class UIManager {
         // Indicador de nivel
         this.levelText = this.scene.add.text(UI.HEIGHT_TEXT_X, UI.HEIGHT_TEXT_Y + 50, 'Nivel: 1', {
             fontSize: UI.HEIGHT_TEXT_FONT_SIZE,
-            fontFamily: UI.HEIGHT_TEXT_FONT_FAMILY,
+            fontFamily: window.FamilyV2.fontFamily,
             fill: UI.HEIGHT_TEXT_COLOR,
             stroke: UI.HEIGHT_TEXT_STROKE,
             strokeThickness: UI.HEIGHT_TEXT_STROKE_THICKNESS

@@ -84,7 +84,15 @@ async function solve(page) {
             assert.deepEqual(await page.evaluate(() => { const p=__capturedGame.scene.getScene('BananaPartyGame').player.sprite; return [p.x,p.y]; }), frozen);
             await page.locator('family-v2-shell #close').click();
             await page.waitForFunction(() => !__capturedGame.isPaused);
-            if (process.env.SCREENSHOT_DIR) { fs.mkdirSync(process.env.SCREENSHOT_DIR,{recursive:true}); await page.screenshot({path:path.join(process.env.SCREENSHOT_DIR,'banana-'+viewport.width+'.png')}); }
+            if (process.env.SCREENSHOT_DIR) {
+                fs.mkdirSync(process.env.SCREENSHOT_DIR,{recursive:true});
+                for (const theme of ['light','dark']) {
+                    await page.locator('family-v2-shell #theme').selectOption(theme);
+                    await page.waitForTimeout(80);
+                    await page.screenshot({path:path.join(process.env.SCREENSHOT_DIR,'banana-'+viewport.width+'-'+theme+'.png')});
+                }
+                await page.locator('family-v2-shell #theme').selectOption('light');
+            }
             const before = await page.evaluate(() => __capturedGame.scene.getScene('BananaPartyGame').player.sprite.x);
             const right=await page.locator('[data-control="right"]').boundingBox();
             const touch = await context.newCDPSession(page);
@@ -99,6 +107,9 @@ async function solve(page) {
             const releasedX=await page.evaluate(()=>__capturedGame.scene.getScene('BananaPartyGame').player.sprite.x);
             await page.waitForTimeout(160);
             assert(await page.evaluate(held=>Math.abs(__capturedGame.scene.getScene('BananaPartyGame').player.sprite.body.velocity.x)<Math.abs(held)/2,heldVelocity),'touch release restores existing friction instead of holding movement');
+            // A canvas is not focusable by default: explicitly return focus to the
+            // production game surface rather than the shell's isolated keyboard scope.
+            await page.locator('canvas').first().evaluate(node => { node.tabIndex=0; node.focus(); });
             await page.keyboard.down('ArrowLeft');await page.waitForTimeout(120);await page.keyboard.up('ArrowLeft');
             assert(await page.evaluate(old=>__capturedGame.scene.getScene('BananaPartyGame').player.sprite.x<old,releasedX),'keyboard still moves');
             await page.setViewportSize({width:viewport.height,height:viewport.width});
